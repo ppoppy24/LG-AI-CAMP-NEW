@@ -21,7 +21,7 @@ def load_ocr_reader():
 reader = load_ocr_reader()
 
 # API 설정 (Gemini 3 Flash 환경)
-API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
+API_KEY = st.secrets.get("GEMINI_API_KEY")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.0-flash" 
 
@@ -36,10 +36,11 @@ if 'step' not in st.session_state:
     st.session_state.new_recommendations = []
 
 # ===============================
-# 2. 핵심 로직 함수
+# 2. 핵심 로직 함수 (수정된 부분)
 # ===============================
 
 def translate_problems_batch(en_list):
+    """15문제를 묶어서 번역하며, 실패 시 숫자를 포함한 한글 문장 강제 생성"""
     combined_query = "\n".join([f"{i+1}. {txt}" for i, txt in enumerate(en_list)])
     prompt = (
         "수학 교사로서 아래 영문 문제들을 한국어 '-하시오' 체로 번역하시오.\n"
@@ -51,16 +52,26 @@ def translate_problems_batch(en_list):
         results = []
         for i, en_text in enumerate(en_list):
             try:
+                # 해당 번호로 시작하는 줄 찾기
                 line = [l for l in lines if str(i+1) in l[:5]][0]
                 results.append(re.sub(r'^\d+[\.\s]*', '', line).strip())
             except:
-                n = re.findall('[0-9]+', en_text)[0] if re.findall('[0-9]+', en_text) else "수"
+                # 특정 문항 번역 실패 시: 원문에서 숫자 추출하여 문장 생성
+                nums = re.findall('[0-9]+', en_text)
+                n = nums[0] if nums else "수"
                 results.append(f"{n}을 소인수분해하시오.")
         return results
     except:
-        return [f"문제를 소인수분해하시오." for _ in en_list]
+        # API 전체 호출 실패 시: 전체 리스트에 대해 숫자 추출 후 반환
+        fallback_results = []
+        for t in en_list:
+            nums = re.findall('[0-9]+', t)
+            n = nums[0] if nums else "수"
+            fallback_results.append(f"{n}를 소인수분해하시오.")
+        return fallback_results
 
 def diagnose_learning_status(results):
+    """RF 모델 진단 연동"""
     if not os.path.exists(RF_MODEL_PATH): return "MODEL_MISSING", 0, 0
     try:
         model = joblib.load(RF_MODEL_PATH)
@@ -87,7 +98,6 @@ if st.session_state.step == 0:
                 selected_en = random.sample(pool, 15)
                 with st.spinner("AI 선생님이 문제를 준비 중입니다..."):
                     translated_ko = translate_problems_batch(selected_en)
-                    # 이제 랜덤 키 없이, 단순하게 생성합니다.
                     st.session_state.problems = [
                         {
                             'id': i+1, 
@@ -106,16 +116,13 @@ elif st.session_state.step == 1:
         st.markdown(f"### **Q{i+1}.**")
         st.info(p['question'])
         
-        # 제출 방식 선택
         p['input_type'] = st.radio(f"제출 방식 (Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"type_{i}", horizontal=True)
 
         if p['input_type'] == "⌨️ 타이핑":
-            # ✅ 웨일 설정을 바꿨으므로, 이제 평범하고 고정된 key를 사용합니다.
-            # 이렇게 하면 글자를 입력해도 절대 사라지지 않습니다.
             p['ans'] = st.text_input(
                 label="정답 입력", 
-                value=p['ans'], # 기존에 입력한 값을 유지
-                key=f"ans_input_{i}" # 고정된 키
+                value=p['ans'], 
+                key=f"ans_input_{i}"
             )
         else:
             captured_img = st.camera_input(f"Q{i+1} 풀이 촬영", key=f"cam_{i}")
@@ -133,7 +140,6 @@ elif st.session_state.step == 2:
         with st.spinner("AI가 채점 및 사진 분석 중..."):
             for p in st.session_state.problems:
                 final_ans = p['ans']
-                # 사진 모드일 때만 OCR 가동
                 if p['input_type'] == "📸 사진 찍기" and p['img_ans'] is not None:
                     img = Image.open(p['img_ans'])
                     img_np = np.array(img)
