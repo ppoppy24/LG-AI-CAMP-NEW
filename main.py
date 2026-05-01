@@ -24,7 +24,7 @@ reader = load_ocr_reader()
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 # 모델명을 현재 API에서 안정적으로 지원하는 명칭으로 유지합니다.
-MODEL_NAME = "gemini-2.0-flash" 
+MODEL_NAME = "gemini-2.5-flash" 
 
 RF_MODEL_PATH = 'bkt_rf_model.pkl'
 DATA_PATH = 'bkt_training_dataset_english_problem.csv'
