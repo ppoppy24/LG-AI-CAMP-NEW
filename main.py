@@ -21,8 +21,9 @@ def load_ocr_reader():
 reader = load_ocr_reader()
 
 # API 설정 (Gemini 3 Flash 환경)
-API_KEY = st.secrets.get("GEMINI_API_KEY")
+API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
+# 모델명을 현재 API에서 안정적으로 지원하는 명칭으로 유지합니다.
 MODEL_NAME = "gemini-2.0-flash" 
 
 RF_MODEL_PATH = 'bkt_rf_model.pkl'
@@ -36,7 +37,7 @@ if 'step' not in st.session_state:
     st.session_state.new_recommendations = []
 
 # ===============================
-# 2. 핵심 로직 함수 (수정된 부분)
+# 2. 핵심 로직 함수
 # ===============================
 
 def translate_problems_batch(en_list):
@@ -52,17 +53,14 @@ def translate_problems_batch(en_list):
         results = []
         for i, en_text in enumerate(en_list):
             try:
-                # 해당 번호로 시작하는 줄 찾기
                 line = [l for l in lines if str(i+1) in l[:5]][0]
                 results.append(re.sub(r'^\d+[\.\s]*', '', line).strip())
             except:
-                # 특정 문항 번역 실패 시: 원문에서 숫자 추출하여 문장 생성
                 nums = re.findall('[0-9]+', en_text)
                 n = nums[0] if nums else "수"
                 results.append(f"{n}을 소인수분해하시오.")
         return results
     except:
-        # API 전체 호출 실패 시: 전체 리스트에 대해 숫자 추출 후 반환
         fallback_results = []
         for t in en_list:
             nums = re.findall('[0-9]+', t)
@@ -141,23 +139,41 @@ elif st.session_state.step == 2:
             for p in st.session_state.problems:
                 final_ans = p['ans']
                 if p['input_type'] == "📸 사진 찍기" and p['img_ans'] is not None:
-                    img = Image.open(p['img_ans'])
-                    img_np = np.array(img)
-                    ocr_result = reader.readtext(img_np, detail=0)
-                    final_ans = " ".join(ocr_result)
+                    try:
+                        img = Image.open(p['img_ans'])
+                        img_np = np.array(img)
+                        ocr_result = reader.readtext(img_np, detail=0)
+                        final_ans = " ".join(ocr_result)
+                    except:
+                        final_ans = "(사진 분석 실패)"
                 
+                # 🛠️ [에러 수정 포인트] AI 호출 시 예외 처리 추가
                 prompt = f"문제: {p['question']}\n학생 답: {final_ans}\nO/X 판정, 분석, 개념보강, 정답공개 순으로 작성."
-                resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
+                try:
+                    resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
+                    feedback_text = resp.text
+                    is_correct = 1 if feedback_text.strip().startswith('O') else 0
+                except Exception as e:
+                    # AI 호출 실패 시 기본 메시지 출력
+                    feedback_text = f"죄송합니다. AI 피드백을 생성하는 중 오류가 발생했습니다. (오류: {str(e)})"
+                    is_correct = 0
+                
                 st.session_state.feedback_results.append({
                     'id': p['id'], 
-                    'is_correct': 1 if resp.text.strip().startswith('O') else 0, 
-                    'content': resp.text
+                    'is_correct': is_correct, 
+                    'content': feedback_text
                 })
                 
-                if not st.session_state.feedback_results[-1]['is_correct']:
-                    rec_q = client.models.generate_content(model=MODEL_NAME, contents=f"'{p['question']}' 유사 한글 문제 생성.")
+                # 오답인 경우 추천 문제 생성 (역시 예외 처리 적용)
+                if is_correct == 0:
+                    try:
+                        rec_q_resp = client.models.generate_content(model=MODEL_NAME, contents=f"'{p['question']}' 유사 한글 문제 생성.")
+                        rec_question = rec_q_resp.text
+                    except:
+                        rec_question = "유사 문제를 생성할 수 없습니다. 다시 시도해 주세요."
+                    
                     st.session_state.new_recommendations.append({
-                        'ref_id': p['id'], 'q': rec_q.text, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"
+                        'ref_id': p['id'], 'q': rec_question, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"
                     })
 
     for res in st.session_state.feedback_results:
@@ -190,8 +206,12 @@ elif st.session_state.step == 4:
     st.title("🏆 최종 성취도")
     if 'bkt_report' not in st.session_state:
         status, acc, gain = diagnose_learning_status(st.session_state.feedback_results)
-        report = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정확도:{acc*100:.1f}%. 조언 한글로.")
-        st.session_state.bkt_report = report.text
+        # 최종 리포트 생성 시 예외 처리
+        try:
+            report_resp = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정확도:{acc*100:.1f}%. 조언 한글로.")
+            st.session_state.bkt_report = report_resp.text
+        except:
+            st.session_state.bkt_report = "성취도 리포트를 생성하는 중 오류가 발생했습니다."
         st.session_state.bkt_status = status
 
     st.success(f"### 성취 등급: {st.session_state.bkt_status}")
