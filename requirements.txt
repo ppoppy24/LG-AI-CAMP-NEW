@@ -7,3 +7,4 @@ opencv-python-headless
 easyocr
 nest_asyncio
 scikit-learn
+google-generativeai
