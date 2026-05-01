@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
 import os
 import google.generativeai as genai
 import nest_asyncio
@@ -9,123 +8,89 @@ import random
 
 # 1. 초기 환경 설정
 nest_asyncio.apply()
-st.set_page_config(page_title="AI 지능형 튜토리얼", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="AI 영어 학습 튜터", page_icon="📝", layout="centered")
 
-# 2. 보안 설정: Secrets로부터 API 키 로드
+# 2. 보안 설정: Secrets로부터 Gemini API 키 로드
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    # 모델명을 'gemini-1.5-flash'로 변경 (성능이 빠르고 NotFound 에러 해결에 효과적)
-    gemini_model = genai.GenerativeModel('gemini-2.5-flash')
+    # 가장 빠르고 효율적인 gemini-1.5-flash 모델 사용
+    gemini_model = genai.GenerativeModel('gemini-1.5-flash')
 else:
-    st.error("❌ API 키를 찾을 수 없습니다. Streamlit Secrets 설정을 확인해주세요.")
+    st.error("❌ API 키를 찾을 수 없습니다. Streamlit Cloud의 Settings > Secrets를 확인해주세요.")
     st.stop()
 
-# 3. 리소스 로드 함수
+# 3. 데이터 로드 (문제 은행 불러오기)
 @st.cache_resource
-def load_resources():
-    model_path = 'bkt_rf__model.pkl'
+def load_data():
     data_path = 'bkt_training_dataset_english_problem.csv'
-    
-    rf_model = joblib.load(model_path) if os.path.exists(model_path) else None
-    df = pd.read_csv(data_path) if os.path.exists(data_path) else None
-        
-    return rf_model, df
+    if os.path.exists(data_path):
+        return pd.read_csv(data_path)
+    return None
 
-rf_model, df = load_resources()
+df = load_data()
 
-# 4. 사이드바: 학생 데이터 관리
-st.sidebar.title("👤 학생 관리")
-if df is not None:
-    student_list = sorted(df['user_id'].unique())
-    selected_student = st.sidebar.selectbox("진단 대상 학생 ID", student_list)
-    student_history = df[df['user_id'] == selected_student]
-    student_data = student_history.iloc[-1]
-else:
-    st.sidebar.error("데이터셋 파일을 찾을 수 없습니다.")
-    st.stop()
-
-# 5. 메인 화면 구성
-st.title("🎓 AI 지능형 학습 진단 및 맞춤형 문제 추천")
-st.write(f"현재 **학생 ID: {selected_student}**의 학습 데이터를 분석 중입니다.")
-
-# 대시보드 요약
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    st.metric("최근 결과", "✅ 정답" if student_data['correct'] == 1 else "❌ 오답")
-with col2:
-    st.metric("응답 속도", f"{student_data['ms_first_response']/1000:.2f}초")
-with col3:
-    st.metric("총 소요 시간", f"{student_data['overlap_time']/1000:.2f}초")
-with col4:
-    st.metric("현재 진도", f"{student_data['order_id']}회차")
-
+# 4. 메인 화면 구성
+st.title("📖 AI 맞춤형 영어 문제장")
+st.write("학습을 시작하려면 아래 버튼을 눌러주세요. 중복 없는 15문제가 제공됩니다.")
 st.divider()
 
-# 6. 탭 구성
-tab1, tab2, tab3 = st.tabs(["🧐 AI 정밀 진단", "📚 맞춤형 15문제 추천", "📊 학습 이력"])
+# 5. 세션 상태 관리 (문제 세트 유지)
+if 'current_problems' not in st.session_state:
+    st.session_state.current_problems = None
 
-# --- 탭 1: AI 진단 및 피드백 ---
-with tab1:
-    st.subheader("🤖 BKT 모델 및 Gemini AI 통합 분석")
-    if st.button("실시간 진단 실행"):
-        if rf_model is not None:
-            # RF 모델 입력 (5 features)
-            features = np.array([[
-                student_data['correct'],
-                student_data['ms_first_response'],
-                student_data['overlap_time'],
-                student_data['first_action'],
-                student_data['order_id']
-            ]])
-            prediction = rf_model.predict(features)[0]
-            status = "숙달(Mastery)" if prediction == 1 else "미숙달(Non-Mastery)"
-            
-            with st.spinner('Gemini가 분석 메시지를 생성 중입니다...'):
-                try:
-                    prompt = f"학생 학습 데이터(결과:{status}, 시간:{student_data['ms_first_response']}ms)를 바탕으로 3줄 내외의 격려 피드백을 한글로 작성해줘."
-                    response = gemini_model.generate_content(prompt)
-                    
-                    st.info(f"📊 **BKT 진단 결과:** 현재 학생은 **{status}** 상태입니다.")
-                    st.success(f"💌 **AI 피드백:**\n\n{response.text}")
-                    if prediction == 1: st.balloons()
-                except Exception as e:
-                    st.error(f"Gemini 호출 중 오류가 발생했습니다: {e}")
-        else:
-            st.error("모델 파일을 찾을 수 없습니다.")
-
-# --- 탭 2: 중복 없는 15문제 제공 ---
-with tab2:
-    st.subheader("📝 학생 맞춤형 연습 문제 (15문항)")
-    st.write("데이터셋에서 중복되지 않은 15개의 문제를 무작위로 추출합니다.")
-    
-    if st.button("새로운 문제 세트 생성"):
-        # 문제 컬럼 후보들 중 존재하는 것 선택
-        prob_col = None
-        for col in ['generated_problem_english', 'problem_id', 'assistment_id']:
-            if col in df.columns:
-                prob_col = col
-                break
+# 문제 생성 버튼
+if st.button("🔄 새로운 문제 15개 생성하기", type="primary"):
+    if df is not None:
+        # 문제 데이터가 들어있는 컬럼 확인 (사용자별 데이터가 아닌 전체 문제 풀에서 추출)
+        prob_col = 'generated_problem_english' if 'generated_problem_english' in df.columns else 'problem_id'
         
-        if prob_col:
-            all_problems = df[prob_col].dropna().unique().tolist()
+        if prob_col in df.columns:
+            # 전체 문제 풀에서 중복 제거 후 리스트화
+            problem_pool = df[prob_col].dropna().unique().tolist()
             
-            if len(all_problems) >= 15:
-                selected_problems = random.sample(all_problems, 15)
-                for i, prob in enumerate(selected_problems, 1):
-                    with st.expander(f"Q{i}. 문제 확인하기"):
-                        st.write(f"**문제 내용:** {prob}")
-                        st.text_input(f"정답 입력 (Q{i})", key=f"q_input_{i}")
-                st.success("✅ 15문제가 생성되었습니다.")
+            if len(problem_pool) >= 15:
+                st.session_state.current_problems = random.sample(problem_pool, 15)
+                st.success("✅ 새로운 15문제가 준비되었습니다!")
             else:
-                st.warning(f"고유 문제가 {len(all_problems)}개뿐입니다. 모든 문제를 표시합니다.")
-                for i, prob in enumerate(all_problems, 1):
-                    st.write(f"Q{i}. {prob}")
+                st.session_state.current_problems = problem_pool
+                st.warning(f"전체 문제가 부족하여 {len(problem_pool)}개만 불러왔습니다.")
         else:
-            st.error("데이터셋에서 문제 컬럼을 찾을 수 없습니다.")
+            st.error("데이터셋에서 문제 내용을 찾을 수 없습니다.")
+    else:
+        st.error("데이터 파일을 불러올 수 없습니다. 파일명을 확인해주세요.")
 
-# --- 탭 3: 상세 이력 ---
-with tab3:
-    st.subheader(f"📈 학생 ID {selected_student}의 전체 로그")
-    st.dataframe(student_history)
-    st.subheader("소요 시간 변화 추이")
-    st.line_chart(student_history['overlap_time'])
+# 6. 문제 출력 및 실시간 번역
+if st.session_state.current_problems:
+    for i, prob in enumerate(st.session_state.current_problems, 1):
+        with st.container():
+            st.markdown(f"### **Question {i}**")
+            # 영어 지문을 눈에 잘 띄게 박스로 처리
+            st.info(prob)
+            
+            # 번역 및 해설 버튼 (Gemini 활용)
+            if st.button(f"🔍 번역 및 문법 설명 보기 (Q{i})", key=f"trans_{i}"):
+                with st.spinner('AI 튜터가 해석 중...'):
+                    try:
+                        # Gemini에게 전달할 프롬프트
+                        prompt = f"다음 영어 문제를 한국어로 번역하고, 핵심 단어와 문법을 2줄로 설명해줘:\n\n{prob}"
+                        response = gemini_model.generate_content(prompt)
+                        st.markdown("---")
+                        st.markdown(f"**💡 AI 해석 및 가이드:**\n\n{response.text}")
+                        st.markdown("---")
+                    except Exception as e:
+                        st.error(f"오류가 발생했습니다: {e}")
+            
+            # 정답 입력칸
+            st.text_input("정답을 입력하세요", key=f"input_{i}")
+            st.write("") # 문제 사이 간격
+    
+    st.divider()
+    if st.button("🎉 학습 완료 (제출)"):
+        st.balloons()
+        st.success("오늘의 15문제를 모두 확인하셨습니다! 수고하셨습니다.")
+
+else:
+    st.info("좌측 상단의 버튼을 눌러 오늘의 학습을 시작하세요.")
+
+# 하단 정보
+st.caption("LG AI CAMP NEW | Gemini 1.5 Flash Engine")
