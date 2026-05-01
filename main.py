@@ -1,109 +1,101 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import os
 import google.generativeai as genai
 import nest_asyncio
-import random
 from PIL import Image
+import io
 
 # 1. 초기 환경 설정
 nest_asyncio.apply()
-st.set_page_config(page_title="AI 영어 학습 & OCR", page_icon="📸", layout="centered")
+st.set_page_config(page_title="AI 맞춤형 문제 등록", page_icon="✍️", layout="centered")
 
-# 2. 보안 설정 및 모델 로드 (Gemini 2.5 적용)
+# 2. 보안 설정 및 모델 로드 (Gemini 2.5 Flash)
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    # 요청하신 대로 버전을 2.5로 변경했습니다.
     gemini_model = genai.GenerativeModel('gemini-2.5-flash')
 else:
-    st.error("❌ API 키가 설정되지 않았습니다. Streamlit Cloud의 Secrets를 확인해주세요.")
+    st.error("❌ API 키를 설정해주세요.")
     st.stop()
 
-# 3. 데이터 로드 (문제 은행)
+# 3. 데이터 로드 (문제 은행 - 필요시 활용)
 @st.cache_resource
 def load_data():
     data_path = 'bkt_training_dataset_english_problem.csv'
-    if os.path.exists(data_path):
-        return pd.read_csv(data_path)
-    return None
+    return pd.read_csv(data_path) if os.path.exists(data_path) else None
 
 df = load_data()
 
-# 4. 즉시 번역 함수
-def translate_text(text):
-    try:
-        prompt = f"다음 교육 문제를 한국어로 자연스럽게 번역해줘. 오직 번역본만 출력해:\n\n{text}"
-        response = gemini_model.generate_content(prompt)
-        return response.text
-    except Exception as e:
-        return f"번역 실패: {e}"
+# 4. 세션 상태 관리 (최대 15개의 슬롯 관리)
+if 'study_slots' not in st.session_state:
+    # 각 슬롯은 {type: 'none', en: '', ko: '', completed: False} 구조
+    st.session_state.study_slots = [{'type': 'none', 'en': '', 'ko': '', 'completed': False} for _ in range(15)]
 
 # 5. 메인 화면 구성
-st.title("📸 AI OCR & 한글 문제 학습")
-st.write("이미지를 업로드하여 문제를 인식하거나, 문제 은행에서 15문제를 가져올 수 있습니다.")
+st.title("📝 나만의 AI 맞춤형 문제장")
+st.write("각 문제 번호 아래의 입력 방식을 선택하여 문제를 등록하세요.")
+st.divider()
 
-# 6. 탭 구성: OCR 기능과 문제 은행 분리
-tab1, tab2 = st.tabs(["🔍 이미지 문제 인식 (OCR)", "📚 문제 은행 (15문항)"])
-
-# --- 탭 1: OCR 기능 ---
-with tab1:
-    st.subheader("📷 문제 사진 업로드")
-    uploaded_file = st.file_uploader("문제지가 찍힌 이미지를 업로드하세요 (JPG, PNG, JPEG)", type=["jpg", "jpeg", "png"])
-    
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='업로드된 이미지', use_container_width=True)
+# 6. 15개의 문제 슬롯 생성
+for i in range(15):
+    with st.expander(f"📍 문제 {i+1} : {'✅ 등록 완료' if st.session_state.study_slots[i]['completed'] else '⏳ 미등록'}", expanded=not st.session_state.study_slots[i]['completed']):
         
-        if st.button("🚀 이미지에서 문제 추출 및 번역"):
-            with st.spinner('Gemini 2.5가 이미지를 읽고 번역 중입니다...'):
-                try:
-                    # 이미지와 텍스트 프롬프트를 함께 전달 (멀티모달 OCR)
-                    prompt = "이 이미지에 적힌 교육 문제를 텍스트로 추출하고, 그 내용을 한국어로 번역해서 보여줘. [원본 영어]와 [한국어 해석]으로 구분해줘."
+        # 입력 방식 선택 (라디오 버튼)
+        input_type = st.radio(
+            f"입력 방식 선택 (Q{i+1})",
+            ["선택 안함", "📷 사진 찍기/업로드", "⌨️ 직접 타이핑"],
+            key=f"type_{i}",
+            horizontal=True
+        )
+        st.session_state.study_slots[i]['type'] = input_type
+
+        # A. 사진 찍기 방식
+        if input_type == "📷 사진 찍기/업로드":
+            img_file = st.file_uploader(f"문제 사진을 올려주세요 (Q{i+1})", type=['jpg', 'jpeg', 'png'], key=f"img_{i}")
+            if img_file and st.button(f"🚀 AI 분석 및 번역 실행 (Q{i+1})", key=f"btn_img_{i}"):
+                with st.spinner('이미지 분석 중...'):
+                    image = Image.open(img_file)
+                    prompt = "이 이미지의 영어 문제를 추출하고 한국어로 번역해줘. 결과는 반드시 '영어: (내용) / 한글: (내용)' 형식으로 써줘."
                     response = gemini_model.generate_content([prompt, image])
                     
-                    st.success("인식 완료!")
-                    st.markdown("### 📝 분석 결과")
-                    st.write(response.text)
-                except Exception as e:
-                    st.error(f"OCR 처리 중 오류 발생: {e}")
+                    # 간단한 파싱 (응답 결과에 따라 조정 가능)
+                    res_text = response.text
+                    st.session_state.study_slots[i]['en'] = res_text # 원문+해석 전체 저장
+                    st.session_state.study_slots[i]['completed'] = True
+                    st.rerun()
 
-# --- 탭 2: 문제 은행 (자동 번역 포함) ---
-with tab2:
-    if 'bank_problems' not in st.session_state:
-        st.session_state.bank_problems = None
+        # B. 직접 타이핑 방식
+        elif input_type == "⌨️ 직접 타이핑":
+            en_input = st.text_area(f"영어 문제를 입력하세요 (Q{i+1})", key=f"text_{i}")
+            if en_input and st.button(f"🌐 한글로 자동 번역 (Q{i+1})", key=f"btn_text_{i}"):
+                with st.spinner('번역 중...'):
+                    prompt = f"다음 영어 문제를 한국어로 자연스럽게 번역해줘:\n\n{en_input}"
+                    response = gemini_model.generate_content(prompt)
+                    st.session_state.study_slots[i]['en'] = en_input
+                    st.session_state.study_slots[i]['ko'] = response.text
+                    st.session_state.study_slots[i]['completed'] = True
+                    st.rerun()
 
-    if st.button("🔄 새로운 문제 15개 생성 및 자동 번역", type="primary"):
-        if df is not None:
-            prob_col = 'generated_problem_english' if 'generated_problem_english' in df.columns else 'problem_id'
-            if prob_col in df.columns:
-                problem_pool = df[prob_col].dropna().unique().tolist()
-                
-                if len(problem_pool) >= 15:
-                    selected_en = random.sample(problem_pool, 15)
-                    translated_results = []
-                    
-                    progress_bar = st.progress(0)
-                    for i, en_text in enumerate(selected_en):
-                        ko_text = translate_text(en_text)
-                        translated_results.append({"en": en_text, "ko": ko_text})
-                        progress_bar.progress((i + 1) / 15)
-                    
-                    st.session_state.bank_problems = translated_results
-                    st.success("✅ 15문제 번역 완료!")
-            else:
-                st.error("데이터셋 형식이 맞지 않습니다.")
-        else:
-            st.error("데이터 파일을 찾을 수 없습니다.")
+        # 등록된 내용 표시
+        if st.session_state.study_slots[i]['completed']:
+            st.markdown("---")
+            st.success("📝 등록된 내용")
+            if st.session_state.study_slots[i]['ko']: # 타이핑 시
+                st.info(f"**[한글 해석]**\n{st.session_state.study_slots[i]['ko']}")
+                with st.expander("영어 원문 보기"):
+                    st.write(st.session_state.study_slots[i]['en'])
+            else: # 이미지 분석 시
+                st.write(st.session_state.study_slots[i]['en'])
+            
+            st.text_input("✍️ 정답을 입력하세요", key=f"final_ans_{i}")
+            if st.button(f"🗑 다시 작성하기 (Q{i+1})", key=f"reset_{i}"):
+                st.session_state.study_slots[i] = {'type': 'none', 'en': '', 'ko': '', 'completed': False}
+                st.rerun()
 
-    # 문제 출력 (처음부터 한글로 표시)
-    if st.session_state.bank_problems:
-        for i, item in enumerate(st.session_state.bank_problems, 1):
-            st.markdown(f"#### **문제 {i}**")
-            st.info(item['ko'])
-            with st.expander("영어 원문 보기"):
-                st.text(item['en'])
-            st.text_input("정답 입력", key=f"bank_ans_{i}")
-            st.divider()
+# 7. 하단 초기화 버튼
+st.divider()
+if st.button("🧨 전체 문제장 초기화"):
+    st.session_state.study_slots = [{'type': 'none', 'en': '', 'ko': '', 'completed': False} for _ in range(15)]
+    st.rerun()
 
-st.caption("LG AI CAMP NEW | Gemini 2.5 Flash Engine")
+st.caption("LG AI CAMP NEW | Gemini 2.5 Flash 기반 맞춤형 학습장")
