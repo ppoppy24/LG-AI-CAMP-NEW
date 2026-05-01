@@ -130,8 +130,9 @@ elif st.session_state.step == 1:
             # [이미지 UI 반영] 답변 방식 선택
             mode = st.radio(f"답변 방식 (Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"mode_{i}", horizontal=True)
             
+            # ✅ 수정 후
             if mode == "⌨️ 타이핑":
-                st.text_input("정답 입력", key=f"ans_{i}", placeholder="예: 2x2x3")
+                st.text_input("정답 입력", key=f"ans_{i}_{st.session_state.run_id}", placeholder="예: 2x2x3")
             else:
                 img_file = st.camera_input(f"Capture (Q{i+1})", key=f"cam_{i}")
                 if img_file:
@@ -182,7 +183,8 @@ elif st.session_state.step == 2:
         for j, wr in enumerate(wrong_list):
             new_num = generate_recommend_num(wr["num"])
             st.write(f"**추천 Q{j+1}.** {new_num}을 소인수분해하시오.")
-            st.text_input(f"답안 입력", key=f"rec_ans_{j}")
+            # ✅ 수정 후
+            st.text_input(f"답안 입력", key=f"rec_ans_{j}_{st.session_state.run_id}")
 
         if st.button("🏁 최종 제출 및 BKT 진단", type="primary"):
             rec_results = []
