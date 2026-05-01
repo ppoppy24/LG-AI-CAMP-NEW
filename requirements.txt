@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+joblib
+google-genai
+opencv-python-headless
+easyocr
+nest_asyncio
