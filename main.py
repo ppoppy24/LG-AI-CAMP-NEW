@@ -4,119 +4,108 @@ import os
 import google.generativeai as genai
 import nest_asyncio
 import random
-from PIL import Image
 
 # 1. 초기 환경 설정
 nest_asyncio.apply()
-st.set_page_config(page_title="AI 통합 문제 학습기", page_icon="📸", layout="centered")
+st.set_page_config(page_title="AI 실시간 학습 답안지", page_icon="✍️", layout="centered")
 
 # 2. 보안 설정 및 모델 로드 (Gemini 2.5 Flash)
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    # 사용자의 요청에 따라 모델명을 gemini-2.5-flash로 설정
-    # (환경에 따라 404 에러 발생 시 gemini-2.0-flash로 변경하여 사용하세요)
     gemini_model = genai.GenerativeModel('gemini-2.5-flash')
 else:
     st.error("❌ API 키를 설정해주세요. (Streamlit Cloud의 Secrets 메뉴)")
     st.stop()
 
-# 3. 데이터 로드 (문제 은행)
+# 3. 데이터 로드 (학습 시스템 데이터셋)
 @st.cache_resource
 def load_data():
+    # 사용자의 교육 시스템 데이터셋 로드
     data_path = 'bkt_training_dataset_english_problem.csv'
-    return pd.read_csv(data_path) if os.path.exists(data_path) else None
+    if os.path.exists(data_path):
+        return pd.read_csv(data_path)
+    return None
 
 df = load_data()
 
-# 4. 세션 상태 관리 (통합 문제 리스트)
-if 'master_problems' not in st.session_state:
-    st.session_state.master_problems = []
+# 4. 세션 상태 관리 (문제와 입력한 답안 저장)
+if 'quiz_data' not in st.session_state:
+    st.session_state.quiz_data = None
 
 # 5. 메인 화면 구성
-st.title("🎓 AI 통합 학습 시스템")
-st.write("사진을 찍거나 데이터셋에서 문제를 가져와 한글로 학습하세요.")
-st.divider()
+st.title("✍️ AI 맞춤형 학습 답안지")
+st.write("아래 버튼을 누르면 오늘의 15문제가 배정됩니다. 각 문제에 답을 입력하세요.")
 
-# --- 상단: 문제 추가 섹션 (OCR & 자동 배정) ---
-st.subheader("➕ 문제 추가하기")
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("#### **📸 사진으로 추가 (OCR)**")
-    uploaded_file = st.file_uploader("문제 이미지 업로드", type=["jpg", "jpeg", "png"], key="ocr_upload")
-    if uploaded_file and st.button("🚀 이미지 분석 및 추가"):
-        with st.spinner('AI가 이미지를 읽고 번역 중...'):
-            try:
-                image = Image.open(uploaded_file)
-                prompt = "이 이미지의 영어 문제를 텍스트로 추출하고 한국어로 번역해줘. '영어원문: ... / 한글해석: ...' 형식으로 답변해줘."
-                response = gemini_model.generate_content([prompt, image])
-                
-                # 결과 저장
-                st.session_state.master_problems.append({
-                    'en': "이미지에서 추출된 원문",
-                    'ko': response.text,
-                    'type': '📸 OCR'
-                })
-                st.success("OCR 문제가 추가되었습니다!")
-            except Exception as e:
-                st.error(f"이미지 인식 실패: {e}")
-
-with col2:
-    st.markdown("#### **📚 데이터셋에서 추가**")
-    if st.button("🔄 15문제 랜덤 배정 및 즉시 번역", type="primary"):
-        if df is not None:
-            prob_col = 'generated_problem_english' if 'generated_problem_english' in df.columns else 'problem_id'
-            pool = df[prob_col].dropna().unique().tolist()
-            selected_en = random.sample(pool, 15) if len(pool) >= 15 else pool
+# 6. 문제 배정 및 자동 번역 (최초 1회 실행)
+if st.button("🏁 오늘의 문제 15개 받기", type="primary"):
+    if df is not None:
+        prob_col = 'generated_problem_english' if 'generated_problem_english' in df.columns else 'problem_id'
+        pool = df[prob_col].dropna().unique().tolist()
+        
+        if len(pool) >= 15:
+            selected_en = random.sample(pool, 15)
+            quiz_list = []
             
             progress_bar = st.progress(0)
             status_text = st.empty()
             
             for i, en_text in enumerate(selected_en):
-                status_text.text(f"⏳ {i+1}/{len(selected_en)} 번역 중...")
+                status_text.text(f"🤖 문제를 한글로 준비 중... ({i+1}/15)")
                 try:
-                    prompt = f"다음 문제를 한글로 자연스럽게 번역해줘. 번역문만 출력: {en_text}"
+                    # 문제 즉시 한글화
+                    prompt = f"다음 영어 문제를 한국어로 자연스럽게 번역해줘. 번역문만 출력: {en_text}"
                     response = gemini_model.generate_content(prompt)
-                    st.session_state.master_problems.append({
+                    quiz_list.append({
                         'en': en_text,
                         'ko': response.text,
-                        'type': '📖 데이터셋'
+                        'user_answer': ""
                     })
                 except:
-                    continue
-                progress_bar.progress((i + 1) / len(selected_en))
+                    quiz_list.append({'en': en_text, 'ko': en_text, 'user_answer': ""})
+                progress_bar.progress((i + 1) / 15)
             
+            st.session_state.quiz_data = quiz_list
             status_text.empty()
             progress_bar.empty()
-            st.success("15문제가 추가되었습니다!")
-        else:
-            st.error("데이터 파일을 찾을 수 없습니다.")
+            st.rerun()
+    else:
+        st.error("데이터셋 파일을 찾을 수 없습니다.")
 
 st.divider()
 
-# --- 하단: 통합 문제 출력 섹션 ---
-if st.session_state.master_problems:
-    st.subheader(f"📝 현재 학습 리스트 ({len(st.session_state.master_problems)}문항)")
-    
-    for i, item in enumerate(st.session_state.master_problems, 1):
-        with st.container():
-            st.markdown(f"**Question {i}** [{item['type']}]")
-            
-            # 한글 번역본 즉시 노출
-            st.info(item['ko'])
-            
-            # 영어 원문은 선택적으로 확인
-            with st.expander("영어 원문 보기"):
-                st.write(item['en'])
-            
-            st.text_input("정답 입력", key=f"ans_{i}")
-            st.write("")
-            st.divider()
+# 7. 답안 입력 섹션
+if st.session_state.quiz_data:
+    for i, item in enumerate(st.session_state.quiz_data):
+        st.markdown(f"#### **Q{i+1}.**")
+        st.info(item['ko']) # 번역된 문제 표시
+        
+        # 사용자가 답을 입력하는 곳 (핵심 기능)
+        user_input = st.text_input(f"Q{i+1}번 답안 입력", key=f"input_{i}", placeholder="정답 또는 풀이 과정을 입력하세요.")
+        st.session_state.quiz_data[i]['user_answer'] = user_input
+        
+        with st.expander("영어 원문 확인"):
+            st.write(item['en'])
+        st.write("")
 
-    if st.button("🧨 리스트 전체 초기화"):
-        st.session_state.master_problems = []
-        st.rerun()
+    # 8. 최종 제출 및 AI 피드백
+    if st.button("📤 답안 제출하고 채점받기"):
+        st.divider()
+        st.subheader("📊 AI 학습 진단 및 피드백") # 학습 진단 도구 활용
+        
+        with st.spinner('AI 튜터가 답안을 채점하고 피드백을 생성 중입니다...'):
+            all_answers = ""
+            for i, item in enumerate(st.session_state.quiz_data):
+                all_answers += f"문제{i+1}: {item['en']}\n학생답변: {item['user_answer']}\n\n"
+            
+            # 채점 및 피드백 프롬프트
+            feedback_prompt = f"다음은 학생이 푼 15개의 영어 문제와 답안이야. 각 문제의 정답 여부를 판단하고, 틀린 부분에 대해 친절하게 설명해줘:\n\n{all_answers}"
+            feedback_res = gemini_model.generate_content(feedback_prompt)
+            
+            st.success("채점이 완료되었습니다!")
+            st.markdown(feedback_res.text)
+            st.balloons()
+
 else:
-    st.info("위의 메뉴를 통해 학습할 문제를 추가해 주세요.")
+    st.info("위의 버튼을 눌러 학습을 시작하세요.")
 
-st.caption("LG AI CAMP NEW | Gemini 2.5 Flash 통합 OCR & 번역 엔진")
+st.caption("LG AI CAMP NEW | Gemini 2.5 Flash 자동 채점 시스템")
