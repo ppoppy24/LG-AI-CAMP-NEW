@@ -12,15 +12,15 @@ from google import genai
 # 1. 환경 설정 및 초기화
 st.set_page_config(page_title="AI BKT 학습 시스템", layout="centered")
 
-# API 설정 (Streamlit Cloud Secrets 필수)
-API_KEY = st.secrets.get("GEMINI_API_KEY")
+# API 설정
+API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.0-flash"
 
 RF_MODEL_PATH = 'bkt_rf_model.pkl' 
 DATA_PATH = 'bkt_training_dataset_english_problem.csv'
 
-# 세션 상태 초기화 (더 강력한 무작위 ID)
+# 세션 초기화
 if 'step' not in st.session_state:
     st.session_state.step = 0
     st.session_state.problems = []
@@ -33,17 +33,21 @@ if 'step' not in st.session_state:
 # ===============================
 
 def safe_translate(en_text):
-    """영문 문제를 한글로 강제 번역하는 로직"""
-    prompt = f"너는 수학 선생님이야. 다음 영문 문제를 반드시 한국어 '-하시오' 체로만 번역해줘. 영어를 그대로 출력하면 안 돼. 문제: {en_text}"
+    """영문 문제를 한글로 강제 번역 및 구문 오류 방지 로직"""
+    prompt = f"너는 수학 선생님이야. 다음 영문 문제를 반드시 한국어 '-하시오' 체로만 번역해줘. 영어를 그대로 출력하지 마. 문제: {en_text}"
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
         ko_text = resp.text.strip()
-        # AI가 영문을 그대로 뱉었는지 확인 (숫자/기호 제외)
-        if ko_text.lower() == en_text.lower():
-             return f"{re.search(r'\d+', en_text).group() if re.search(r'\d+', en_text) else ''}을 소인수분해하시오."
+        
+        # AI가 번역을 거부하거나 영문을 그대로 뱉은 경우 (fallback)
+        if ko_text.lower() == en_text.lower() or len(re.sub(r'[^a-zA-Z]', '', ko_text)) > len(ko_text) * 0.5:
+            # f-string 내부 백슬래시 에러 방지를 위해 변수 추출 후 사용
+            match = re.search(r'\d+', en_text)
+            number = match.group() if match else "숫자"
+            return f"{number}를 소인수분해하시오."
         return ko_text
     except:
-        return en_text
+        return "문제를 번역하는 중 오류가 발생했습니다."
 
 def diagnose_learning_status(results):
     """RF 모델 기반 학습 상태 진단"""
@@ -81,11 +85,9 @@ if st.session_state.step == 0:
                         temp_probs.append({'id': i+1, 'question': ko_text, 'ans': ""})
                 
                 st.session_state.problems = temp_probs
-                st.session_state.run_id = str(int(time.time())) # 매 시작마다 ID 갱신
+                st.session_state.run_id = str(int(time.time()))
                 st.session_state.step = 1
                 st.rerun()
-        else:
-            st.error("데이터셋 파일이 저장소에 없습니다.")
 
 elif st.session_state.step == 1:
     st.title("📝 1차 학습: 15문제")
@@ -93,8 +95,8 @@ elif st.session_state.step == 1:
         st.markdown(f"### **Q{p.get('id', i+1)}.**")
         st.info(p.get('question'))
         
-        # 자동완성 방지용 무작위 라벨 (브라우저를 속이는 핵심 장치)
-        input_label = f"정답을 입력하세요 (세션ID:{st.session_state.run_id[-4:]}-{i})"
+        # 자동완성 방지: 라벨에 유니크한 ID를 포함시켜 브라우저를 속임
+        input_label = f"정답 입력창 (ID:{st.session_state.run_id[-3:]}-{i})"
         p['ans'] = st.text_input(input_label, key=f"ans_{i}_{st.session_state.run_id}")
         st.divider()
 
@@ -105,15 +107,18 @@ elif st.session_state.step == 1:
 elif st.session_state.step == 2:
     st.title("🔍 채점 결과 및 AI 피드백")
     if not st.session_state.feedback_results:
-        with st.spinner("AI 선생님이 채점 중입니다..."):
+        with st.spinner("AI 선생님이 상세 분석 중입니다..."):
             for p in st.session_state.problems:
-                prompt = f"문제: {p.get('question')}\n학생 답: {p.get('ans')}\n판정(O/X), 분석, 개념보강, 정답공개 순으로 상세히 설명해줘."
+                prompt = (
+                    f"문제: {p.get('question')}\n학생 답: {p.get('ans')}\n"
+                    "지침: 1. 첫 줄에 O/X 판정 2. 논리 분석 3. 보완 개념 4. ✅ 정답: [값]"
+                )
                 resp = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
                 is_correct = 1 if resp.strip().startswith('O') else 0
                 st.session_state.feedback_results.append({'id': p.get('id'), 'is_correct': is_correct, 'content': resp})
                 
                 if not is_correct:
-                    rec_q = client.models.generate_content(model=MODEL_NAME, contents=f"'{p.get('question')}'의 유사 한글 문제를 하나 만들어줘.").text
+                    rec_q = client.models.generate_content(model=MODEL_NAME, contents=f"'{p.get('question')}'의 유사 원리 한글 문제를 하나 만들어줘.").text
                     st.session_state.new_recommendations.append({'ref_id': p.get('id'), 'q': rec_q, 'ans': ""})
 
     for res in st.session_state.feedback_results:
@@ -121,7 +126,7 @@ elif st.session_state.step == 2:
         else: st.error(f"❌ Q{res['id']}\n{res['content']}")
 
     if st.session_state.new_recommendations:
-        if st.button("🚀 오답 보완 문제 풀기", type="primary"):
+        if st.button("🚀 추천 문제 풀기", type="primary"):
             st.session_state.step = 3
             st.rerun()
 
@@ -129,9 +134,10 @@ elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     for i, rec in enumerate(st.session_state.new_recommendations):
         st.info(rec.get('q'))
-        rec['ans'] = st.text_input(f"추천 정답 입력 (ID:{st.session_state.run_id[-3:]}-{i})", key=f"rec_{i}_{st.session_state.run_id}")
+        # 추천 문제도 자동완성 방지 적용
+        rec['ans'] = st.text_input(f"답 입력 (코드:{st.session_state.run_id[-2:]}-{i})", key=f"rec_{i}_{st.session_state.run_id}")
 
-    if st.button("🏁 최종 학습 진단", type="primary"):
+    if st.button("🏁 최종 진단", type="primary"):
         st.session_state.step = 4
         st.rerun()
 
@@ -139,7 +145,7 @@ elif st.session_state.step == 4:
     st.title("🏆 최종 성취도 진단")
     status, acc, gain = diagnose_learning_status(st.session_state.feedback_results)
     
-    report_prompt = f"상태:{status}, 정확도:{acc*100:.1f}%. 이 데이터를 근거로 학생에게 등급(A~E)과 학습 처방을 한국어로 내려줘."
+    report_prompt = f"상태:{status}, 정확도:{acc*100:.1f}%. 이 결과로 학생에게 등급(A~E)과 학습 방향을 조언해줘."
     report = client.models.generate_content(model=MODEL_NAME, contents=report_prompt).text
     
     st.success(f"### 분석 결과: {status}")
