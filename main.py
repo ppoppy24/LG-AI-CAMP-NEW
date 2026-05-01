@@ -124,7 +124,8 @@ elif st.session_state.step == 1:
     st.title("📝 1차 학습: 오늘의 15문제")
     for i, p in enumerate(st.session_state.problems):
         with st.container():
-            st.markdown(f"### **Q{p['id']}.**")
+            # ✅ 수정 후 (가장 안전한 방식)
+            st.markdown(f"### **Q{p.get('id', i+1)}.**")
             st.info(p['question'])
             
             # 자동 완성 방지를 위해 라벨과 키에 run_id 조합
