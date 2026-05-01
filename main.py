@@ -24,17 +24,17 @@ df = load_data()
 
 # 세션 상태 관리
 if 'current_step' not in st.session_state:
-    st.session_state.current_step = 0       # 0: 시작 화면, 1: 1차 풀이, 2: 채점/추천, 3: 최종 진단
+    st.session_state.current_step = 0
     st.session_state.original_problems = []
     st.session_state.feedback_results = []
     st.session_state.new_recommendations = []
 
 # ==========================================
-# 🏠 [단계 0] 시작 화면 (문제 생성 버튼)
+# 🏠 [단계 0] 시작 화면 (문제 생성 및 즉시 번역)
 # ==========================================
 if st.session_state.current_step == 0:
     st.title("🎓 AI 맞춤형 BKT 학습 시스템")
-    st.write("학습 데이터셋에서 15문제를 배정받아 오늘의 학습을 시작하세요.")
+    st.write("학습 시작 버튼을 누르면 15문제를 가져와 즉시 한글로 번역합니다.")
     st.divider()
     
     if st.button("🚀 오늘의 문제 생성 및 학습 시작", type="primary", use_container_width=True):
@@ -43,12 +43,37 @@ if st.session_state.current_step == 0:
             pool = df[prob_col].dropna().unique().tolist()
             
             if len(pool) >= 15:
-                selected = random.sample(pool, 15)
-                st.session_state.original_problems = [
-                    {'id': i+1, 'question': q, 'input_type': '타이핑', 'text_ans': "", 'img_ans': None} 
-                    for i, q in enumerate(selected)
-                ]
+                selected_en = random.sample(pool, 15)
+                temp_problems = []
+                
+                # 진행 바 추가 (번역 시간 동안 사용자 대기)
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                
+                for i, en_text in enumerate(selected_en):
+                    status_text.text(f"🤖 문제를 한글로 번역 중... ({i+1}/15)")
+                    try:
+                        # 즉시 한글 번역 수행
+                        trans_prompt = f"다음 영어 교육 문제를 한국어로 자연스럽게 번역해줘. 번역문만 출력:\n\n{en_text}"
+                        response = gemini_model.generate_content(trans_prompt)
+                        ko_text = response.text
+                    except:
+                        ko_text = en_text # 에러 발생 시 원문 유지
+                        
+                    temp_problems.append({
+                        'id': i+1, 
+                        'question_en': en_text, 
+                        'question_ko': ko_text, 
+                        'input_type': '타이핑', 
+                        'text_ans': "", 
+                        'img_ans': None
+                    })
+                    progress_bar.progress((i + 1) / 15)
+                
+                st.session_state.original_problems = temp_problems
                 st.session_state.current_step = 1
+                status_text.empty()
+                progress_bar.empty()
                 st.rerun()
             else:
                 st.warning("데이터셋의 문항 수가 부족합니다.")
@@ -56,16 +81,20 @@ if st.session_state.current_step == 0:
             st.error("데이터셋 파일을 찾을 수 없습니다.")
 
 # ==========================================
-# 📖 [단계 1] 15문제 풀이 (카메라 촬영/타이핑)
+# 📖 [단계 1] 15문제 풀이 (한글 문제 즉시 표시)
 # ==========================================
 elif st.session_state.current_step == 1:
     st.title("📝 1차 학습: 오늘의 15문제")
-    st.write("각 문제 아래에서 답변 방식을 선택하세요. 사진은 카메라로 직접 찍어야 합니다.")
+    st.write("한글로 번역된 문제를 확인하고 답안을 제출하세요.")
     
     for i, p in enumerate(st.session_state.original_problems):
         with st.container():
             st.markdown(f"### **Q{p['id']}.**")
-            st.info(p['question'])
+            # 💡 한글 번역본을 바로 보여줍니다.
+            st.info(p['question_ko'])
+            
+            with st.expander("영어 원문 보기"):
+                st.write(p['question_en'])
             
             p['input_type'] = st.radio(f"답변 방식 (Q{p['id']})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"radio_{i}", horizontal=True)
             
@@ -81,12 +110,10 @@ elif st.session_state.current_step == 1:
         st.session_state.current_step = 2
         st.rerun()
 
-# ==========================================
-# 📊 [단계 2] 채점 결과 및 추천 문제 생성
-# ==========================================
+# [이하 단계 2~3 로직은 이전과 동일하게 유지]
 elif st.session_state.current_step == 2:
     st.title("🔍 1차 채점 결과 및 맞춤 추천")
-    with st.spinner('AI 분석 및 추천 문제 생성 중...'):
+    with st.spinner('AI 분석 중...'):
         if not st.session_state.feedback_results:
             for p in st.session_state.original_problems:
                 student_answer = p['text_ans']
@@ -94,14 +121,14 @@ elif st.session_state.current_step == 2:
                     ocr_res = gemini_model.generate_content(["이 카메라 사진의 답안을 읽어줘.", p['img_ans']])
                     student_answer = ocr_res.text
 
-                grade_prompt = f"문제: {p['question']}\n학생의 답: {student_answer}\n맞으면 'O', 틀리면 'X'와 이유를 적어줘."
+                grade_prompt = f"문제: {p['question_ko']}\n학생의 답: {student_answer}\n맞으면 'O', 틀리면 'X'와 이유를 적어줘."
                 grade_res = gemini_model.generate_content(grade_prompt).text
                 is_correct = grade_res.strip().startswith('O')
                 
                 st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_correct, 'feedback': grade_res})
 
                 if not is_correct:
-                    gen_prompt = f"이 문제({p['question']})의 개념을 유지하며 숫자나 인수를 바꾼 변형 문제를 1개 만들어줘."
+                    gen_prompt = f"이 문제({p['question_ko']})의 개념을 유지하며 숫자나 인수를 바꾼 변형 문제를 1개 한글로 만들어줘."
                     new_q = gemini_model.generate_content(gen_prompt).text
                     st.session_state.new_recommendations.append({'ref_id': p['id'], 'new_question': new_q, 'new_ans': ""})
         
@@ -114,14 +141,10 @@ elif st.session_state.current_step == 2:
             st.session_state.current_step = 3
             st.rerun()
     else:
-        st.success("🎉 모든 문제를 맞혔습니다!")
         if st.button("🔄 처음으로"):
             st.session_state.clear()
             st.rerun()
 
-# ==========================================
-# 🏆 [단계 3] 추천 문제 풀이 및 최종 진단
-# ==========================================
 elif st.session_state.current_step == 3:
     st.title("🎯 최종 학습: 오답 맞춤 추천")
     for i, rec in enumerate(st.session_state.new_recommendations):
@@ -140,4 +163,4 @@ elif st.session_state.current_step == 3:
             st.session_state.clear()
             st.rerun()
 
-st.caption("LG AI CAMP NEW | Gemini 2.5 Flash | Camera-Only Mode")
+st.caption("LG AI CAMP NEW | Gemini 2.5 Flash | 자동 번역 및 촬영 전용")
