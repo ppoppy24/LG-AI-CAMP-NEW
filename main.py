@@ -9,10 +9,10 @@ import time
 from PIL import Image
 from google import genai
 
-# 1. 환경 설정
+# 1. 환경 설정 및 초기화
 st.set_page_config(page_title="AI BKT 학습 시스템", layout="centered")
 
-# API 및 모델 설정
+# API 설정
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.0-flash"
@@ -29,39 +29,35 @@ if 'step' not in st.session_state:
     st.session_state.run_id = str(int(time.time() * 100))
 
 # ===============================
-# 2. 강력한 번역 및 진단 로직 (SyntaxError 해결)
+# 2. 핵심 로직 함수
 # ===============================
 
 def translate_problems_batch(en_list):
-    """15문제를 한 번에 번역 (에러 방지 및 속도 향상)"""
+    """15문제를 묶어서 번역하여 에러 및 속도 저하 방지"""
     combined_query = "\n".join([f"{i+1}. {txt}" for i, txt in enumerate(en_list)])
     prompt = (
         "너는 수학 선생님이야. 아래 영문 문제들을 순서대로 한국어 '-하시오' 체로 번역해줘.\n"
         "영어는 절대 섞지 말고 한국어 문장만 번역해서 15개를 나열해줘.\n\n"
         f"{combined_query}"
     )
-    
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
         translated_lines = resp.text.strip().split('\n')
-        
         results = []
         for i, en_text in enumerate(en_list):
             try:
-                # 해당 번호로 시작하는 라인 찾기
                 line = [l for l in translated_lines if str(i+1) in l[:5]][0]
                 results.append(re.sub(r'^\d+[\.\s]*', '', line).strip())
             except:
-                # 비상: 숫자 추출 로직 (f-string 외부에서 처리하여 SyntaxError 방지)
-                nums = re.findall(r'\d+', en_text)
+                # SyntaxError 방지를 위해 백슬래시 없는 정규식 사용 후 문자열 조립
+                nums = re.findall('[0-9]+', en_text)
                 n = nums[0] if nums else "수"
                 results.append(n + "를 소인수분해하시오.")
         return results
     except:
-        # 전체 API 실패 시 비상 처리
         fallback = []
         for t in en_list:
-            nums = re.findall(r'\d+', t)
+            nums = re.findall('[0-9]+', t)
             n = nums[0] if nums else "수"
             fallback.append(n + "를 소인수분해하시오.")
         return fallback
@@ -81,7 +77,7 @@ def diagnose_learning_status(results):
     except: return "ERROR", 0, 0
 
 # ===============================
-# 3. 단계별 UI
+# 3. UI 및 단계별 흐름
 # ===============================
 
 if st.session_state.step == 0:
@@ -92,7 +88,7 @@ if st.session_state.step == 0:
             pool = df['generated_problem_english'].dropna().unique().tolist()
             if len(pool) >= 15:
                 selected_en = random.sample(pool, 15)
-                with st.spinner("AI가 15문제를 번역 중입니다..."):
+                with st.spinner("AI가 문제를 한국어로 변환 중입니다..."):
                     translated_ko = translate_problems_batch(selected_en)
                     st.session_state.problems = [{'id': i+1, 'question': q, 'ans': ""} for i, q in enumerate(translated_ko)]
                 st.session_state.run_id = str(int(time.time() * 100))
@@ -103,21 +99,19 @@ if st.session_state.step == 0:
 
 elif st.session_state.step == 1:
     st.title("📝 1차 학습: 15문제")
-    
     for i, p in enumerate(st.session_state.problems):
         st.markdown(f"### **Q{i+1}.**")
         st.info(p.get('question'))
         
-        # 💡 자동완성(검은 네모) 방지 핵심: 
-        # 1. 라벨에 무작위 유니코드(자음/모음 등)를 섞어 브라우저가 인식 못하게 함
-        # 2. key를 매번 완전히 다르게 생성
-        random_char = random.choice(["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ"])
-        dynamic_label = f"정답 입력 {random_char} (코드:{st.session_state.run_id[-4:]}-{i})"
+        # ⭐ [네모 없애는 부분 추가] ⭐
+        # 브라우저 자동완성을 방지하기 위해 라벨에 세션 고유 ID를 포함시킵니다.
+        # 라벨이 달라지면 브라우저는 과거 기록을 띄우지 않습니다.
+        dynamic_label = f"정답 입력 (코드:{st.session_state.run_id[-4:]}-{i})"
         
         p['ans'] = st.text_input(
             dynamic_label, 
-            key=f"input_{i}_{st.session_state.run_id}_{random.randint(100,999)}",
-            placeholder="예: 2x3x5"
+            key=f"input_{i}_{st.session_state.run_id}",
+            placeholder="예: 2x2x3"
         )
         st.divider()
 
@@ -152,12 +146,10 @@ elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     for i, rec in enumerate(st.session_state.new_recommendations):
         st.info(rec.get('q'))
-        # 추천 문제도 자동완성 차단
-        r_char = random.choice(["⭐", "🔹", "🔸", "📍"])
-        rec['ans'] = st.text_input(
-            f"추천 답안 {r_char} ({st.session_state.run_id[-2:]}-{i})", 
-            key=f"rec_{i}_{st.session_state.run_id}_{random.randint(10,99)}"
-        )
+        
+        # ⭐ [추천 문제에도 네모 방지 적용] ⭐
+        dynamic_rec_label = f"추천 답안 입력 (ID:{st.session_state.run_id[-2:]}-{i})"
+        rec['ans'] = st.text_input(dynamic_rec_label, key=f"rec_{i}_{st.session_state.run_id}")
 
     if st.button("🏁 최종 진단 보고서", type="primary"):
         st.session_state.step = 4
