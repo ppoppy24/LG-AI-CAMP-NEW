@@ -106,7 +106,7 @@ elif st.session_state.current_step == 2:
                     "1. 맞으면 'O', 틀리면 'X'를 첫 줄에 출력할 것.\n"
                     "2. 틀린 경우, 학생의 답이나 식에서 어떤 부분이 잘못되었는지 논리적인 이유를 자세히 설명할 것.\n"
                     "3. 학생이 놓치고 있는 개념이 무엇인지 짚어줄 것.\n"
-                    "4. ⚠️ 절대 정답(최종 결과값)을 직접적으로 말하지 말 것. 학생이 다시 생각하게 유도할 것."
+                    "4. 학생에게 답을 알려줄 것
                 )
                 res_text = gemini_model.generate_content(grade_prompt).text
                 is_correct = res_text.strip().startswith('O')
