@@ -171,8 +171,11 @@ elif st.session_state.step == 2:
         # AI 피드백 생성
         summary = "\n".join([f"문제: {r['num']}, 학생답: {r['user_ans']}, 정답: {r['correct_ans']}" for r in wrong_list])
         with st.spinner("AI 선생님의 오답 분석 중..."):
-            resp = client.models.generate_content(model=MODEL_NAME, contents=f"수학 교사로서 다음 오답을 분석하고 격려해줘: {summary}")
-            st.markdown(resp.text)
+# ✅ 수정 후 (model= 키워드 추가)
+resp = client.models.generate_content(
+    model=MODEL_NAME, 
+    contents=f"수학 교사로서 다음 오답을 분석하고 격려해줘: {summary}"
+)
         
         st.divider()
         st.subheader("💡 오답 맞춤 추천 문제")
