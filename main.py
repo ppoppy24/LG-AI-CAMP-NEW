@@ -14,7 +14,8 @@ st.set_page_config(page_title="AI 지능형 튜토리얼", page_icon="🎓", lay
 # 2. 보안 설정: Secrets로부터 API 키 로드
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    gemini_model = genai.GenerativeModel('gemini-pro')
+    # 모델명을 'gemini-1.5-flash'로 변경 (성능이 빠르고 NotFound 에러 해결에 효과적)
+    gemini_model = genai.GenerativeModel('gemini-2.5-flash')
 else:
     st.error("❌ API 키를 찾을 수 없습니다. Streamlit Secrets 설정을 확인해주세요.")
     st.stop()
@@ -80,44 +81,51 @@ with tab1:
             status = "숙달(Mastery)" if prediction == 1 else "미숙달(Non-Mastery)"
             
             with st.spinner('Gemini가 분석 메시지를 생성 중입니다...'):
-                prompt = f"학생 학습 데이터(결과:{status}, 시간:{student_data['ms_first_response']}ms)를 바탕으로 3줄 내외의 격려 피드백을 한글로 작성해줘."
-                response = gemini_model.generate_content(prompt)
-            
-            st.info(f"📊 **BKT 진단 결과:** 현재 학생은 **{status}** 상태입니다.")
-            st.success(f"💌 **AI 피드백:**\n\n{response.text}")
-            if prediction == 1: st.balloons()
+                try:
+                    prompt = f"학생 학습 데이터(결과:{status}, 시간:{student_data['ms_first_response']}ms)를 바탕으로 3줄 내외의 격려 피드백을 한글로 작성해줘."
+                    response = gemini_model.generate_content(prompt)
+                    
+                    st.info(f"📊 **BKT 진단 결과:** 현재 학생은 **{status}** 상태입니다.")
+                    st.success(f"💌 **AI 피드백:**\n\n{response.text}")
+                    if prediction == 1: st.balloons()
+                except Exception as e:
+                    st.error(f"Gemini 호출 중 오류가 발생했습니다: {e}")
         else:
             st.error("모델 파일을 찾을 수 없습니다.")
 
-# --- 탭 2: 중복 없는 15문제 제공 (신규 추가 로직) ---
+# --- 탭 2: 중복 없는 15문제 제공 ---
 with tab2:
     st.subheader("📝 학생 맞춤형 연습 문제 (15문항)")
     st.write("데이터셋에서 중복되지 않은 15개의 문제를 무작위로 추출합니다.")
     
     if st.button("새로운 문제 세트 생성"):
-        # 전체 데이터셋에서 고유한 문제들 추출 (이미지 기반 컬럼 활용)
-        # 'generated_problem_english' 또는 'problem_id' 기준
-        if 'generated_problem_english' in df.columns:
-            all_problems = df['generated_problem_english'].dropna().unique().tolist()
-        else:
-            all_problems = df['problem_id'].dropna().unique().tolist()
-
-        if len(all_problems) >= 15:
-            # 중복 없이 15개 무작위 샘플링
-            selected_problems = random.sample(all_problems, 15)
+        # 문제 컬럼 후보들 중 존재하는 것 선택
+        prob_col = None
+        for col in ['generated_problem_english', 'problem_id', 'assistment_id']:
+            if col in df.columns:
+                prob_col = col
+                break
+        
+        if prob_col:
+            all_problems = df[prob_col].dropna().unique().tolist()
             
-            for i, prob in enumerate(selected_problems, 1):
-                with st.expander(f"Q{i}. 문제 확인하기"):
-                    st.write(prob)
-                    st.text_input(f"Q{i} 정답 입력", key=f"answer_{i}")
-            
-            st.success("✅ 15문제가 성공적으로 생성되었습니다. 문제를 풀고 제출하세요!")
+            if len(all_problems) >= 15:
+                selected_problems = random.sample(all_problems, 15)
+                for i, prob in enumerate(selected_problems, 1):
+                    with st.expander(f"Q{i}. 문제 확인하기"):
+                        st.write(f"**문제 내용:** {prob}")
+                        st.text_input(f"정답 입력 (Q{i})", key=f"q_input_{i}")
+                st.success("✅ 15문제가 생성되었습니다.")
+            else:
+                st.warning(f"고유 문제가 {len(all_problems)}개뿐입니다. 모든 문제를 표시합니다.")
+                for i, prob in enumerate(all_problems, 1):
+                    st.write(f"Q{i}. {prob}")
         else:
-            st.warning(f"현재 가용한 고유 문제가 {len(all_problems)}개뿐입니다. 모든 문제를 표시합니다.")
-            for i, prob in enumerate(all_problems, 1):
-                st.write(f"Q{i}. {prob}")
+            st.error("데이터셋에서 문제 컬럼을 찾을 수 없습니다.")
 
 # --- 탭 3: 상세 이력 ---
-with tab2:
+with tab3:
     st.subheader(f"📈 학생 ID {selected_student}의 전체 로그")
     st.dataframe(student_history)
+    st.subheader("소요 시간 변화 추이")
+    st.line_chart(student_history['overlap_time'])
