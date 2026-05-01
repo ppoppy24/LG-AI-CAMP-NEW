@@ -1,0 +1,430 @@
+﻿order_id,assignment_id,user_id,assistment_id,problem_id,original,correct,attempt_count,ms_first_response,tutor_mode,answer_type,sequence_id,student_class_id,position,type,base_sequence_id,skill_id,skill_name,teacher_id,school_id,hint_count,hint_total,overlap_time,template_id,answer_id,answer_text,first_action,bottom_hint,opportunity,opportunity_original,generated_problem_english
+1,264268,79616,49360,88045,1,1,1,39998,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,39998,46303,,2x5x3,0,,10,10.0,Find the prime factorization of 30.
+2,270581,79616,49322,88007,1,0,2,3343,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,10234,46303,,4x5,0,,4,4.0,Find the prime factorization of 20.
+3,265362,79616,49354,88039,1,1,1,53726,tutor,fill_in_1,6929,12351,59,MasterySection,6929,84.0,Prime Number,42999,2770,0,4,53726,46303,,5x2x2,0,,1,1.0,Find the prime factorization of 20.
+4,264268,79616,49361,88046,1,1,1,20758,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,20758,46303,,2x3x7,0,,10,10.0,Find the prime factorization of 42.
+5,277537,79616,49348,88033,1,1,1,36669,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,36669,46303,,2x2x2,0,,4,4.0,Find the prime factorization of 8.
+6,264268,79616,52147,91471,1,1,1,101248,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,101248,46303,,3x3x2,0,,1,1.0,Find the prime factorization of 18.
+7,264268,79616,49369,88054,1,1,1,18504,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,18504,46303,,2x3x3,0,,6,6.0,Find the prime factorization of 18.
+8,274903,79616,49342,88027,1,1,1,12810,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,12810,46303,,5x2x2,0,,4,4.0,Find the prime factorization of 20.
+9,274496,79616,49320,88005,1,1,1,49238,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,49238,46303,,2 x 3 x 5,0,,1,1.0,Find the prime factorization of 30.
+10,276006,79616,49372,88057,1,1,2,21186,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,36767,46303,,10x2,0,,1,1.0,Find the prime factorization of 20.
+11,277537,79616,49365,88050,1,1,1,32086,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,32086,46303,,2x2x3,0,,2,2.0,Find the prime factorization of 12.
+12,274496,79616,49394,88079,1,0,1,25472,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,25472,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+13,277537,79616,49295,87980,1,1,1,6374,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6374,46303,,3x2x2,0,,5,5.0,Find the prime factorization of 12.
+14,274903,79616,49340,88025,1,1,1,8038,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8038,46303,,5x2x3,0,,6,6.0,Find the prime factorization of 30.
+15,270581,79616,49357,88042,1,1,1,29964,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,29964,46303,,7x2x2,0,,5,5.0,Find the prime factorization of 28.
+16,274496,79616,49274,87959,1,0,1,45212,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,45212,46303,,5 x 2 x 2,0,,1,1.0,Find the prime factorization of 20.
+1,270581,83205,49343,88028,1,1,1,12215,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,12215,46303,,3x5x2,0,,4,4.0,Find the prime factorization of 30.
+2,277537,83205,49299,87984,1,0,1,18215,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,18215,46303,,3x3x2,0,,2,2.0,Find the prime factorization of 18.
+3,277537,83205,49341,88026,1,1,1,16189,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,16189,46303,,7x3x2,0,,5,5.0,Find the prime factorization of 42.
+4,274903,83205,49369,88054,1,1,1,12344,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,12344,46303,,3x3x2,0,,6,6.0,Find the prime factorization of 18.
+5,274903,83205,49390,88075,1,1,1,50421,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,50421,46303,,5x2x3,0,,2,2.0,Find the prime factorization of 30.
+6,270581,83205,49337,88022,1,0,1,181193,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,181193,46303,,7x2x2,0,,1,1.0,Find the prime factorization of 28.
+7,264268,83205,49301,87986,1,1,1,14201,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14201,46303,,2 x 3 x 7,0,,7,7.0,Find the prime factorization of 42.
+8,264268,83205,49298,87983,1,1,1,44676,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,44676,46303,,2 x 2 x 3,0,,1,1.0,Find the prime factorization of 12.
+9,270581,83205,49354,88039,1,1,1,7109,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7109,46303,,5x2x2,0,,2,2.0,Find the prime factorization of 20.
+10,274903,83205,49339,88024,1,1,1,52556,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,52556,46303,,3x2x3,0,,1,1.0,Find the prime factorization of 18.
+11,264268,83205,49371,88056,1,0,1,8902,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8902,46303,,7x6,0,,15,15.0,Find the prime factorization of 42.
+12,264268,83205,49298,87983,1,1,1,29757,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,29757,46303,,2x2x3,0,,7,7.0,Find the prime factorization of 12.
+13,277537,83205,49321,88006,1,1,1,13324,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13324,46303,,7x3x2,0,,6,6.0,Find the prime factorization of 42.
+14,264268,83205,52147,91471,1,1,3,45129,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,1,4,59370,46303,,13x3x5,0,0.0,5,5.0,Find the prime factorization of 195.
+15,276006,83205,49318,88003,1,0,1,24305,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,8,24305,46303,,2x2x3,0,,4,4.0,Find the prime factorization of 12.
+16,264268,83205,49342,88027,1,1,1,44184,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,44184,46303,,2x2x5,0,,10,10.0,Find the prime factorization of 20.
+17,277537,83205,52142,91466,1,1,1,18174,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,18174,46303,,2x2x2,0,,5,5.0,Find the prime factorization of 8.
+18,277537,83205,49391,88076,1,1,7,38462,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,102740,46303,,3*2*7,0,1.0,2,2.0,Find the prime factorization of 42.
+19,264268,83205,49271,87956,1,1,1,9417,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9417,46303,,2 x 2 x 3,0,,6,6.0,Find the prime factorization of 12.
+1,277537,79623,49390,88075,1,0,1,6784,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6784,46303,,5x3x2,0,,6,6.0,Find the prime factorization of 30.
+2,274496,79623,49340,88025,1,0,2,79556,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,155395,46303,,10x3,0,0.0,1,1.0,Find the prime factorization of 30.
+3,274903,79623,49400,88085,1,1,1,22526,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,22526,46303,,2x5x3,0,,4,4.0,Find the prime factorization of 30.
+4,270581,79623,49374,88059,1,0,1,53353,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,53353,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+5,274496,79623,49393,88078,1,0,1,8603,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8603,46303,,2 x 5 x 3,0,,4,4.0,Find the prime factorization of 30.
+6,274903,79623,49280,87965,1,0,1,114589,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,114589,46303,,5x2x3,0,,4,4.0,Find the prime factorization of 30.
+7,277537,79623,52150,91474,1,0,2,7745,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,9869,46303,,2 x 2 x5,0,,7,7.0,Find the prime factorization of 20.
+8,274903,79623,49316,88001,1,1,1,9448,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,9448,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+9,264268,79623,49283,87968,1,1,1,57133,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,57133,46303,,2 x3 x 5,0,,1,1.0,Find the prime factorization of 30.
+10,276996,79623,49362,88047,1,0,2,8187,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,19437,46303,,2x2x2,0,,3,3.0,Find the prime factorization of 8.
+11,274903,79623,49391,88076,1,0,2,31232,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,4,4,53009,46303,,3x2x7,0,1.0,2,2.0,Find the prime factorization of 42.
+12,277537,79623,49382,88067,1,0,1,39468,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,39468,46303,,5x2x2,0,,6,6.0,Find the prime factorization of 20.
+13,274496,79623,52142,91466,1,0,1,16797,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,16797,46303,,2x2x2,0,,5,5.0,Find the prime factorization of 8.
+14,277537,79623,49321,88006,1,0,1,77407,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,77407,46303,,7 x 3 x 2,0,,5,5.0,Find the prime factorization of 42.
+15,277537,79623,49402,88087,1,0,1,23937,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,23937,46303,,2x2x5,0,,3,3.0,Find the prime factorization of 20.
+16,274903,79623,49316,88001,1,0,1,22453,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,22453,46303,,5 x 2 x 2,0,,8,8.0,Find the prime factorization of 20.
+17,264268,79623,49384,88069,1,0,1,13237,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,13237,46303,,2x2x2,0,,9,9.0,Find the prime factorization of 8.
+18,264268,79623,49388,88073,1,1,1,15918,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,15918,46303,,2x2x3,0,,10,10.0,Find the prime factorization of 12.
+19,276996,79623,49403,88088,1,1,4,9938,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,4,4,95388,46303,,5 x 6,0,1.0,2,2.0,Find the prime factorization of 30.
+20,264268,79623,49354,88039,1,0,1,8735,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8735,46303,,2 x 2 x 5,0,,8,8.0,Find the prime factorization of 20.
+21,276996,79623,52143,91467,1,1,1,7406,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,7406,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+1,264268,64525,52147,91471,1,0,1,101248,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,101248,46303,,3x3x2,0,,1,1.0,Find the prime factorization of 18.
+2,270581,64525,49339,88024,1,0,1,9805,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,9805,46303,,3x3x2,0,,2,2.0,Find the prime factorization of 18.
+3,277537,64525,49376,88061,1,1,1,4169,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,4169,46303,,2 x 2 x 5,0,,9,9.0,Find the prime factorization of 20.
+4,277537,64525,49387,88072,1,1,1,19539,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,19539,46303,,7x2x2,0,,5,5.0,Find the prime factorization of 28.
+5,264268,64525,49321,88006,1,1,1,104254,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,104254,46303,,7x3x2,0,,1,1.0,Find the prime factorization of 42.
+6,264268,64525,49403,88088,1,0,1,4042,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,4042,46303,,5x3x2,0,,19,19.0,Find the prime factorization of 30.
+7,274903,64525,52150,91474,1,0,1,53641,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,53641,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+8,264268,64525,49303,87988,1,1,1,9314,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9314,46303,,2 x 3 x 5,0,,9,9.0,Find the prime factorization of 30.
+9,276006,64525,49370,88055,1,1,1,15380,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,15380,46303,,5x3x2,0,,2,2.0,Find the prime factorization of 30.
+10,264268,64525,52143,91467,1,1,1,38260,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,38260,46303,,2 x 2 x 3,0,,1,1.0,Find the prime factorization of 12.
+11,270581,64525,49338,88023,1,0,2,58498,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,2,4,200155,46303,,6*2,0,0.0,1,1.0,Find the prime factorization of 12.
+12,264268,64525,49379,88064,1,1,1,11159,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,11159,46303,,3x6,0,,7,7.0,Find the prime factorization of 18.
+13,277537,64525,49375,88060,1,1,1,5046,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,5046,46303,,2x2x3,0,,4,4.0,Find the prime factorization of 12.
+14,264268,64525,49283,87968,1,1,1,57133,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,57133,46303,,2 x3 x 5,0,,1,1.0,Find the prime factorization of 30.
+15,274903,64525,49321,88006,1,1,1,22515,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,22515,46303,,7 x 3 x 2,0,,6,6.0,Find the prime factorization of 42.
+16,270581,64525,52146,91470,1,0,1,4781,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,4781,46303,,2x3x2,0,,4,4.0,Find the prime factorization of 12.
+17,270581,64525,49381,88066,1,1,1,57493,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,57493,46303,,3x7x2,0,,4,4.0,Find the prime factorization of 42.
+18,274903,64525,49297,87982,1,1,1,32703,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,32703,46303,,7 x 2 x 2,0,,7,7.0,Find the prime factorization of 28.
+19,277537,64525,49397,88082,1,1,1,7686,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7686,46303,,7 x 2 x 2,0,,3,3.0,Find the prime factorization of 28.
+20,274903,64525,49295,87980,1,1,1,34235,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,34235,46303,,2x2x3,0,,5,5.0,Find the prime factorization of 12.
+21,274903,64525,49400,88085,1,1,1,42492,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,42492,46303,,2x3x5,0,,3,3.0,Find the prime factorization of 30.
+22,276006,64525,49396,88081,1,0,1,24786,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,24786,46303,,2x5x2,0,,3,3.0,Find the prime factorization of 20.
+1,270581,70677,49337,88022,1,1,1,181193,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,181193,46303,,7x2x2,0,,1,1.0,Find the prime factorization of 28.
+2,277537,70677,49397,88082,1,1,1,7686,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7686,46303,,7 x 2 x 2,0,,3,3.0,Find the prime factorization of 28.
+3,274903,70677,49316,88001,1,1,1,9448,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,9448,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+4,284565,70677,49401,88086,1,1,1,27609,tutor,fill_in_1,6928,13976,7,MasterySection,6928,84.0,Prime Number,65109,5117,0,4,27609,46303,,2 x 3 x 7,0,,1,1.0,Find the prime factorization of 42.
+5,264268,70677,49298,87983,1,0,1,44676,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,44676,46303,,2 x 2 x 3,0,,1,1.0,Find the prime factorization of 12.
+6,277537,70677,49399,88084,1,1,2,105352,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,119929,46303,,2*3*3,0,,1,1.0,Find the prime factorization of 18.
+7,264268,70677,49379,88064,1,1,1,11159,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,11159,46303,,3x6,0,,7,7.0,Find the prime factorization of 18.
+8,264268,70677,49392,88077,1,1,1,8363,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8363,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+9,270581,70677,49271,87956,1,1,1,23369,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,23369,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+10,270581,70677,49319,88004,1,0,1,31769,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31769,46303,,3x2x3,0,,3,3.0,Find the prime factorization of 18.
+11,274496,70677,49316,88001,1,1,1,8000,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8000,46303,,2x2x5,0,,7,7.0,Find the prime factorization of 20.
+12,277537,70677,49281,87966,1,1,2,26442,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,43359,46303,,7 x 6,0,,5,5.0,Find the prime factorization of 42.
+13,264268,70677,49376,88061,1,0,1,17944,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,17944,46303,,2x2x5,0,,3,3.0,Find the prime factorization of 20.
+14,277537,70677,49295,87980,1,1,1,61411,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,61411,46303,,3x2x2,0,,1,1.0,Find the prime factorization of 12.
+15,264268,70677,49370,88055,1,1,1,22038,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,22038,46303,,6x5,0,,24,24.0,Find the prime factorization of 30.
+16,264268,70677,49374,88059,1,1,1,7165,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7165,46303,,2x2x2,0,,6,6.0,Find the prime factorization of 8.
+17,277537,70677,49295,87980,1,1,1,15187,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,15187,46303,,2x3x2,0,,9,9.0,Find the prime factorization of 12.
+18,264268,70677,49299,87984,1,1,1,39811,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,39811,46303,,2x3x3,0,,5,5.0,Find the prime factorization of 18.
+19,270581,70677,49274,87959,1,1,1,19591,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,19591,46303,,2x2x5,0,,6,6.0,Find the prime factorization of 20.
+20,264268,70677,49375,88060,1,1,1,15406,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,15406,46303,,2x2x3,0,,8,8.0,Find the prime factorization of 12.
+21,276996,70677,52143,91467,1,1,1,7406,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,7406,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+1,276996,71831,49365,88050,1,0,1,6733,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,6733,46303,,3x2x2,0,,5,5.0,Find the prime factorization of 12.
+2,274903,71831,49397,88082,1,0,1,7201,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,7201,46303,,7x2x2,0,,6,6.0,Find the prime factorization of 28.
+3,270581,71831,49380,88065,1,1,1,36407,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,36407,46303,,5 x 2 x 3,0,,1,1.0,Find the prime factorization of 30.
+4,264268,71831,49367,88052,1,0,1,5759,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,5759,46303,,7x4,0,,7,7.0,Find the prime factorization of 28.
+5,277537,71831,49351,88036,1,1,1,35724,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,35724,46303,,2x2x3,0,,1,1.0,Find the prime factorization of 12.
+6,277537,71831,49277,87962,1,0,1,29658,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,29658,46303,,7x2x2,0,,5,5.0,Find the prime factorization of 28.
+7,274903,71831,49282,87967,1,1,1,14795,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,14795,46303,,5x2x2,0,,3,3.0,Find the prime factorization of 20.
+8,270581,71831,49396,88081,1,1,1,7453,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7453,46303,,5x2x2,0,,5,5.0,Find the prime factorization of 20.
+9,264268,71831,49371,88056,1,0,1,27330,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,27330,46303,,2x3x7,0,,3,3.0,Find the prime factorization of 42.
+10,277537,71831,49335,88020,1,0,2,20920,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,75480,46303,,3x3x2,0,,5,5.0,Find the prime factorization of 18.
+11,277537,71831,49380,88065,1,1,1,20890,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,20890,46303,,5x2x3,0,,4,4.0,Find the prime factorization of 30.
+12,264268,71831,49298,87983,1,0,1,11463,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,11463,46303,,2x3x3,0,,6,6.0,Find the prime factorization of 18.
+13,270581,71831,49380,88065,1,1,1,36407,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,36407,46303,,5 x 2 x 3,0,,1,1.0,Find the prime factorization of 30.
+14,264268,71831,49295,87980,1,0,1,55894,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,55894,46303,,2 x 3 x 3,0,,1,1.0,Find the prime factorization of 18.
+15,264268,71831,49400,88085,1,1,1,7656,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7656,46303,,2x15,0,,2,2.0,Find the prime factorization of 30.
+16,274496,71831,49369,88054,1,1,1,17723,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,17723,46303,,3x3x2,0,,1,1.0,Find the prime factorization of 18.
+17,274496,71831,49318,88003,1,1,1,9273,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,8,9273,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+18,264268,71831,52151,91475,1,1,1,9072,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9072,46303,,2x3x5,0,,17,17.0,Find the prime factorization of 30.
+19,276006,71831,49396,88081,1,1,1,24786,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,24786,46303,,2x5x2,0,,3,3.0,Find the prime factorization of 20.
+1,270581,79738,49319,88004,1,0,1,31769,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31769,46303,,3x2x3,0,,3,3.0,Find the prime factorization of 18.
+2,264268,79738,49374,88059,1,0,1,13320,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,13320,46303,,2x2x2,0,,19,19.0,Find the prime factorization of 8.
+3,270581,79738,49372,88057,1,1,1,32125,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,32125,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+4,274903,79738,49316,88001,1,0,1,27639,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,27639,46303,,5 x 2 x 2,0,,2,2.0,Find the prime factorization of 20.
+5,264268,79738,49278,87963,1,0,1,11821,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,11821,46303,,6x2,0,,11,11.0,Find the prime factorization of 12.
+6,277537,79738,49359,88044,1,1,1,13924,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13924,46303,,3x3x2,0,,8,8.0,Find the prime factorization of 18.
+7,274903,79738,49317,88002,1,0,1,194470,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,194470,46303,,7x2x2,0,,1,1.0,Find the prime factorization of 28.
+8,264268,79738,49383,88068,1,0,1,20005,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,20005,46303,,2x3x5,0,,8,8.0,Find the prime factorization of 30.
+9,264268,79738,49388,88073,1,0,1,12935,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12935,46303,,2x3x3,0,,7,7.0,Find the prime factorization of 18.
+10,274903,79738,49339,88024,1,1,4,21657,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,180339,46303,,11 x 11 x 5,0,0.0,1,1.0,Find the prime factorization of 605.
+11,277537,79738,49399,88084,1,1,2,105352,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,119929,46303,,2*3*3,0,,1,1.0,Find the prime factorization of 18.
+12,276996,79738,49361,88046,1,0,1,94153,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,94153,46303,,7x3x2,0,,5,5.0,Find the prime factorization of 42.
+13,279933,79738,49348,88033,1,1,2,77671,tutor,fill_in_1,6928,13369,33,MasterySection,6928,84.0,Prime Number,60541,5450,0,4,113005,46303,,2x2,0,,4,4.0,Find the prime factorization of 4.
+14,264268,79738,49303,87988,1,1,1,9314,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9314,46303,,2 x 3 x 5,0,,9,9.0,Find the prime factorization of 30.
+15,274903,79738,49316,88001,1,0,1,13143,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,13143,46303,,2x2x5,0,,3,3.0,Find the prime factorization of 20.
+16,276006,79738,49318,88003,1,0,1,6101,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,8,6101,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+17,277537,79738,49335,88020,1,0,1,5453,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,5453,46303,,2x3x2,0,,10,10.0,Find the prime factorization of 12.
+18,264268,79738,49370,88055,1,1,1,22038,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,22038,46303,,6x5,0,,24,24.0,Find the prime factorization of 30.
+19,274903,79738,49278,87963,1,1,1,10421,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,10421,46303,,3x2x2,0,,2,2.0,Find the prime factorization of 12.
+1,264268,79662,49391,88076,1,0,1,29637,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,29637,46303,,7x3x2,0,,2,2.0,Find the prime factorization of 42.
+2,270581,79662,49339,88024,1,0,1,9805,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,9805,46303,,3x3x2,0,,2,2.0,Find the prime factorization of 18.
+3,277537,79662,49381,88066,1,0,1,20553,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,20553,46303,,2 x 3 x 7,0,,7,7.0,Find the prime factorization of 42.
+4,264268,79662,49268,87953,1,0,1,6753,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,6753,46303,,2 x 2 x 2,0,,5,5.0,Find the prime factorization of 8.
+5,277537,79662,49360,88045,1,1,1,9258,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,9258,46303,,5 x 2 x 3,0,,7,7.0,Find the prime factorization of 30.
+6,270581,79662,49343,88028,1,0,1,5801,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,5801,46303,,3x5x2,0,,3,3.0,Find the prime factorization of 30.
+7,264268,79662,49361,88046,1,1,1,3901,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,3901,46303,,6x7,0,,16,16.0,Find the prime factorization of 42.
+8,274903,79662,49338,88023,1,1,2,76313,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,99610,46303,,3 x 2 x 1 x 1,0,,2,2.0,Find the prime factorization of 6.
+9,264268,79662,49386,88071,1,0,1,10695,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10695,46303,,2x2x5,0,,5,5.0,Find the prime factorization of 20.
+10,274903,79662,49299,87984,1,1,1,19547,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,19547,46303,,3x3x2,0,,4,4.0,Find the prime factorization of 18.
+11,276006,79662,49386,88071,1,0,1,10249,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,10249,46303,,5x2x2,0,,3,3.0,Find the prime factorization of 20.
+12,264268,79662,49314,87999,1,1,1,3546,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,3546,46303,,2x2,0,,6,6.0,Find the prime factorization of 4.
+13,277537,79662,49281,87966,1,1,1,25725,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,25725,46303,,7x2x3,0,,3,3.0,Find the prime factorization of 42.
+14,264268,79662,49300,87985,1,1,1,9633,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9633,46303,,2 x 3 x 5,0,,4,4.0,Find the prime factorization of 30.
+15,274496,79662,49314,87999,1,1,2,113079,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,158063,46303,,2x2x2x2,0,0.0,1,1.0,Find the prime factorization of 16.
+16,277537,79662,49381,88066,1,1,1,31461,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31461,46303,,7x2x3,0,,7,7.0,Find the prime factorization of 42.
+1,277537,53167,49376,88061,1,1,1,4169,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,4169,46303,,2 x 2 x 5,0,,9,9.0,Find the prime factorization of 20.
+2,264268,53167,49378,88063,1,1,1,7125,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7125,46303,,6x2,0,,4,4.0,Find the prime factorization of 12.
+3,264268,53167,49367,88052,1,1,1,21530,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,21530,46303,,2 x2 x7,0,,4,4.0,Find the prime factorization of 28.
+4,264268,53167,49315,88000,1,1,3,4105,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,20780,46303,,2x6,0,,8,8.0,Find the prime factorization of 12.
+5,264268,53167,49402,88087,1,0,1,7306,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7306,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+6,264268,53167,49371,88056,1,1,1,40442,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,40442,46303,,2 x3 x 7,0,,3,3.0,Find the prime factorization of 42.
+7,264268,53167,49337,88022,1,1,1,10340,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10340,46303,,7x4,0,,8,8.0,Find the prime factorization of 28.
+8,270581,53167,52149,91473,1,0,1,23803,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,23803,46303,,3x7x2,0,,4,4.0,Find the prime factorization of 42.
+9,277537,53167,49316,88001,1,1,1,33220,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,33220,46303,,2x2x5,0,,7,7.0,Find the prime factorization of 20.
+10,264268,53167,49386,88071,1,1,1,103619,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,103619,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+11,264268,53167,49296,87981,1,1,2,4530,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7883,46303,,5x20,0,,18,18.0,Find the prime factorization of 100.
+12,264268,53167,49303,87988,1,1,1,14668,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14668,46303,,2x3x5,0,,22,22.0,Find the prime factorization of 30.
+13,270581,53167,49337,88022,1,1,1,181193,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,181193,46303,,7x2x2,0,,1,1.0,Find the prime factorization of 28.
+14,274903,53167,49339,88024,1,0,4,21657,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,180339,46303,,11 x 11 x 5,0,0.0,1,1.0,Find the prime factorization of 605.
+15,274903,53167,49319,88004,1,1,3,5940,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,16934,46303,,2x2x2,0,,3,3.0,Find the prime factorization of 8.
+16,264268,53167,49303,87988,1,1,1,7038,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7038,46303,,2x3x5,0,,12,12.0,Find the prime factorization of 30.
+1,270581,70708,49336,88021,1,0,1,20406,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,20406,46303,,2 x 2 x 5,0,,3,3.0,Find the prime factorization of 20.
+2,270581,70708,52143,91467,1,1,1,11048,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11048,46303,,3x2x2,0,,2,2.0,Find the prime factorization of 12.
+3,264268,70708,49316,88001,1,1,1,12967,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12967,46303,,2x2x5,0,,6,6.0,Find the prime factorization of 20.
+4,270581,70708,49337,88022,1,0,1,46085,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,46085,46303,,2 x 2 x 7,0,,1,1.0,Find the prime factorization of 28.
+5,277537,70708,49385,88070,1,1,1,12543,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,12543,46303,,2 x 2 x 3,0,,5,5.0,Find the prime factorization of 12.
+6,277537,70708,49370,88055,1,0,1,26791,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26791,46303,,5x3x2,0,,8,8.0,Find the prime factorization of 30.
+7,274903,70708,49380,88065,1,1,1,13210,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,13210,46303,,2x3x5,0,,4,4.0,Find the prime factorization of 30.
+8,264268,70708,49385,88070,1,1,1,10875,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10875,46303,,2 x 2 x 3,0,,3,3.0,Find the prime factorization of 12.
+9,277537,70708,49295,87980,1,1,1,15187,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,15187,46303,,2x3x2,0,,9,9.0,Find the prime factorization of 12.
+10,277537,70708,49401,88086,1,1,3,17117,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,84286,46303,,7x6,0,1.0,2,2.0,Find the prime factorization of 42.
+11,264268,70708,49386,88071,1,0,1,10695,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10695,46303,,2x2x5,0,,5,5.0,Find the prime factorization of 20.
+12,274903,70708,52142,91466,1,1,1,12960,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,12960,46303,,2x2x2,0,,4,4.0,Find the prime factorization of 8.
+13,270581,70708,49394,88079,1,0,1,26998,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26998,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+14,277537,70708,49402,88087,1,1,1,13422,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13422,46303,,2 x 2 x 5,0,,6,6.0,Find the prime factorization of 20.
+15,270581,70708,49373,88058,1,0,1,7932,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7932,46303,,5x2x3,0,,3,3.0,Find the prime factorization of 30.
+16,274903,70708,49277,87962,1,0,2,28033,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,3,4,168488,46303,,14 x 2,0,0.0,1,1.0,Find the prime factorization of 28.
+17,276006,70708,49318,88003,1,1,1,6101,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,8,6101,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+18,274903,70708,49360,88045,1,1,1,29688,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,29688,46303,,3 x 5 x 2,0,,5,5.0,Find the prime factorization of 30.
+1,270581,79669,49368,88053,1,0,1,11629,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11629,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+2,277537,79669,49380,88065,1,1,1,20890,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,20890,46303,,5x2x3,0,,4,4.0,Find the prime factorization of 30.
+3,264268,79669,49301,87986,1,1,1,14201,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14201,46303,,2 x 3 x 7,0,,7,7.0,Find the prime factorization of 42.
+4,270581,79669,49358,88043,1,1,1,13754,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13754,46303,,2x3x2,0,,2,2.0,Find the prime factorization of 12.
+5,274903,79669,49374,88059,1,0,1,67540,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,67540,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+6,277537,79669,49281,87966,1,0,2,31437,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,50078,46303,,2x2x2x7,0,,7,7.0,Find the prime factorization of 56.
+7,274496,79669,49403,88088,1,0,2,39848,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,56874,46303,,10x3,0,,1,1.0,Find the prime factorization of 30.
+8,264268,79669,52144,91468,1,0,2,16540,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,34265,46303,,10*2,0,,1,1.0,Find the prime factorization of 20.
+9,277537,79669,49282,87967,1,0,1,6331,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6331,46303,,2x2x5,0,,7,7.0,Find the prime factorization of 20.
+10,264268,79669,49382,88067,1,1,1,7848,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7848,46303,,2x2x5,0,,9,9.0,Find the prime factorization of 20.
+11,264268,79669,49301,87986,1,0,1,14201,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14201,46303,,2 x 3 x 7,0,,7,7.0,Find the prime factorization of 42.
+12,277537,79669,49402,88087,1,0,1,13422,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13422,46303,,2 x 2 x 5,0,,6,6.0,Find the prime factorization of 20.
+13,274903,79669,49282,87967,1,1,1,14795,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,14795,46303,,5x2x2,0,,3,3.0,Find the prime factorization of 20.
+14,277537,79669,49359,88044,1,0,1,6221,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6221,46303,,3x3x2,0,,3,3.0,Find the prime factorization of 18.
+15,264268,79669,49372,88057,1,0,1,31986,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,31986,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+16,274496,79669,49393,88078,1,0,1,8603,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8603,46303,,2 x 5 x 3,0,,4,4.0,Find the prime factorization of 30.
+17,270581,79669,49381,88066,1,0,1,57493,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,57493,46303,,3x7x2,0,,4,4.0,Find the prime factorization of 42.
+18,264268,79669,49303,87988,1,1,1,9728,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9728,46303,,5x3x2,0,,12,12.0,Find the prime factorization of 30.
+19,274903,79669,49374,88059,1,0,1,67540,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,67540,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+20,270581,79669,52142,91466,1,1,1,7735,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7735,46303,,2 x 2 x 2,0,,4,4.0,Find the prime factorization of 8.
+1,264268,81081,49376,88061,1,1,1,9734,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9734,46303,,2x2x5,0,,25,25.0,Find the prime factorization of 20.
+2,264268,81081,49283,87968,1,0,1,14640,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14640,46303,,2x3x5,0,,20,20.0,Find the prime factorization of 30.
+3,274903,81081,49316,88001,1,0,1,9448,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,9448,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+4,277537,81081,49295,87980,1,1,1,6374,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6374,46303,,3x2x2,0,,5,5.0,Find the prime factorization of 12.
+5,277537,81081,49297,87982,1,0,2,4715,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,21795,46303,,7x7x2,0,1.0,4,4.0,Find the prime factorization of 98.
+6,264268,81081,49369,88054,1,1,1,18359,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,18359,46303,,2 x 3 x 3,0,,3,3.0,Find the prime factorization of 18.
+7,274903,81081,49295,87980,1,1,1,75422,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,75422,46303,,2x2x3,0,,1,1.0,Find the prime factorization of 12.
+8,274903,81081,49298,87983,1,0,1,10672,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,10672,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+9,264268,81081,49268,87953,1,1,1,8895,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8895,46303,,2x2x2,0,,4,4.0,Find the prime factorization of 8.
+10,274903,81081,49362,88047,1,1,2,69983,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,121014,46303,,5x5x5x5,0,,1,1.0,Find the prime factorization of 625.
+11,270581,81081,49394,88079,1,1,1,26998,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26998,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+12,277537,81081,52142,91466,1,1,2,9652,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11120,46303,,2 x 2 x 2',0,,4,4.0,Find the prime factorization of 8.
+13,264268,81081,49282,87967,1,1,1,12520,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12520,46303,,2x2x5,0,,12,12.0,Find the prime factorization of 20.
+14,264268,81081,49382,88067,1,0,1,7848,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7848,46303,,2x2x5,0,,9,9.0,Find the prime factorization of 20.
+15,274496,81081,49319,88004,1,1,2,13531,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,23891,46303,,2x2x3,0,,4,4.0,Find the prime factorization of 12.
+1,274496,79687,49301,87986,1,1,2,467266,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,499813,46303,,3x2x7,0,,1,1.0,Find the prime factorization of 42.
+2,277537,79687,49321,88006,1,1,1,13324,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13324,46303,,7x3x2,0,,6,6.0,Find the prime factorization of 42.
+3,274496,79687,49403,88088,1,0,2,39848,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,56874,46303,,10x3,0,,1,1.0,Find the prime factorization of 30.
+4,264268,79687,49283,87968,1,1,1,7011,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7011,46303,,5x6,0,,8,8.0,Find the prime factorization of 30.
+5,277537,79687,49334,88019,1,1,2,16162,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26021,46303,,2*2*2,0,,1,1.0,Find the prime factorization of 8.
+6,277537,79687,49271,87956,1,1,1,54116,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,54116,46303,,3x2x2,0,,1,1.0,Find the prime factorization of 12.
+7,276996,79687,49362,88047,1,1,2,8187,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,19437,46303,,2x2x2,0,,3,3.0,Find the prime factorization of 8.
+8,264268,79687,52151,91475,1,0,1,9072,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9072,46303,,2x3x5,0,,17,17.0,Find the prime factorization of 30.
+9,270581,79687,49301,87986,1,1,1,65295,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,65295,46303,,2x3x7,0,,1,1.0,Find the prime factorization of 42.
+10,270581,79687,52143,91467,1,1,1,11048,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11048,46303,,3x2x2,0,,2,2.0,Find the prime factorization of 12.
+11,270581,79687,49384,88069,1,0,1,3922,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,3922,46303,,2x2x2,0,,7,7.0,Find the prime factorization of 8.
+12,270581,79687,49301,87986,1,1,1,65295,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,65295,46303,,2x3x7,0,,1,1.0,Find the prime factorization of 42.
+13,277537,79687,49277,87962,1,1,1,29658,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,29658,46303,,7x2x2,0,,5,5.0,Find the prime factorization of 28.
+14,270581,79687,49271,87956,1,1,1,23369,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,23369,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+15,274496,79687,49342,88027,1,1,1,15281,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,15281,46303,,2x2x5,0,,3,3.0,Find the prime factorization of 20.
+16,274903,79687,49397,88082,1,1,1,7201,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,7201,46303,,7x2x2,0,,6,6.0,Find the prime factorization of 28.
+17,264268,79687,49367,88052,1,1,1,5759,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,5759,46303,,7x4,0,,7,7.0,Find the prime factorization of 28.
+18,274496,79687,49394,88079,1,1,1,25472,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,25472,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+19,274496,79687,52146,91470,1,1,1,10922,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,10922,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+20,274903,79687,49280,87965,1,1,1,114589,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,114589,46303,,5x2x3,0,,4,4.0,Find the prime factorization of 30.
+21,264268,79687,49302,87987,1,1,1,7042,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7042,46303,,5x4,0,,5,5.0,Find the prime factorization of 20.
+22,274496,79687,49334,88019,1,1,1,25820,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,25820,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+1,264268,70729,49387,88072,1,1,1,4953,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,4953,46303,,7x4,0,,19,19.0,Find the prime factorization of 28.
+2,270581,70729,52144,91468,1,0,1,18079,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,18079,46303,,2 x 5 x 2,0,,1,1.0,Find the prime factorization of 20.
+3,274903,70729,49316,88001,1,1,1,27639,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,27639,46303,,5 x 2 x 2,0,,2,2.0,Find the prime factorization of 20.
+4,274496,70729,49318,88003,1,1,1,9273,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,8,9273,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+5,264268,70729,49385,88070,1,0,1,10875,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10875,46303,,2 x 2 x 3,0,,3,3.0,Find the prime factorization of 12.
+6,264268,70729,49375,88060,1,0,1,8608,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8608,46303,,2x2x3,0,,14,14.0,Find the prime factorization of 12.
+7,270581,70729,49394,88079,1,1,1,26998,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26998,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+8,264268,70729,49358,88043,1,0,1,30966,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,30966,46303,,2x2x3,0,,6,6.0,Find the prime factorization of 12.
+9,264268,70729,49390,88075,1,1,2,4029,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,27976,46303,,15x2,0,,11,11.0,Find the prime factorization of 30.
+10,270581,70729,49392,88077,1,0,3,7413,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13816,46303,,4x5,0,,2,2.0,Find the prime factorization of 20.
+11,274903,70729,52150,91474,1,1,1,90670,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,90670,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+12,264268,70729,49358,88043,1,0,1,7170,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7170,46303,,3x2x2,0,,20,20.0,Find the prime factorization of 12.
+13,274903,70729,49279,87964,1,0,1,26938,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,26938,46303,,3x3x2,0,,2,2.0,Find the prime factorization of 18.
+14,264268,70729,49320,88005,1,1,1,12681,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12681,46303,,2 x 3 x 5,0,,9,9.0,Find the prime factorization of 30.
+15,274903,70729,49379,88064,1,0,4,40263,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,4,4,96054,46303,,3*3*2,0,1.0,1,1.0,Find the prime factorization of 18.
+16,274903,70729,49295,87980,1,1,1,75422,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,75422,46303,,2x2x3,0,,1,1.0,Find the prime factorization of 12.
+17,274903,70729,49397,88082,1,0,1,6844,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,6844,46303,,2x2x7,0,,5,5.0,Find the prime factorization of 28.
+18,264268,70729,52147,91471,1,1,1,101248,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,101248,46303,,3x3x2,0,,1,1.0,Find the prime factorization of 18.
+19,277537,70729,49294,87979,1,1,1,30313,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,30313,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+20,264268,70729,52151,91475,1,0,1,9072,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9072,46303,,2x3x5,0,,17,17.0,Find the prime factorization of 30.
+21,264268,70729,49400,88085,1,0,1,4090,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,4090,46303,,5x3x2,0,,21,21.0,Find the prime factorization of 30.
+22,264268,70729,49321,88006,1,0,1,104254,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,104254,46303,,7x3x2,0,,1,1.0,Find the prime factorization of 42.
+23,264268,70729,49383,88068,1,0,1,10157,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10157,46303,,2x3x5,0,,8,8.0,Find the prime factorization of 30.
+24,270581,70729,49319,88004,1,1,1,31769,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31769,46303,,3x2x3,0,,3,3.0,Find the prime factorization of 18.
+1,274903,70730,49295,87980,1,1,1,18161,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,18161,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+2,276996,70730,49401,88086,1,0,2,49171,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,4,4,67748,46303,,7x6,0,1.0,1,1.0,Find the prime factorization of 42.
+3,270581,70730,49376,88061,1,1,1,6078,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6078,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+4,274496,70730,49334,88019,1,1,1,25820,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,25820,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+5,264268,70730,49358,88043,1,1,1,3793,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,3793,46303,,6x2,0,,17,17.0,Find the prime factorization of 12.
+6,277537,70730,49386,88071,1,0,1,7337,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7337,46303,,5 x 2 x 2,0,,5,5.0,Find the prime factorization of 20.
+7,270581,70730,49357,88042,1,0,1,29964,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,29964,46303,,7x2x2,0,,5,5.0,Find the prime factorization of 28.
+8,274903,70730,49299,87984,1,0,1,19547,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,19547,46303,,3x3x2,0,,4,4.0,Find the prime factorization of 18.
+9,270581,70730,49401,88086,1,0,1,68969,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,68969,46303,,2x3x7,0,,1,1.0,Find the prime factorization of 42.
+10,264268,70730,49400,88085,1,1,1,36630,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,36630,46303,,2x3x5,0,,7,7.0,Find the prime factorization of 30.
+11,270581,70730,49319,88004,1,0,1,31769,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31769,46303,,3x2x3,0,,3,3.0,Find the prime factorization of 18.
+12,274496,70730,49318,88003,1,0,1,9273,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,8,9273,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+13,274903,70730,49366,88051,1,0,1,22635,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,22635,46303,,5x2x2,0,,4,4.0,Find the prime factorization of 20.
+14,264268,70730,52149,91473,1,0,1,8527,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8527,46303,,7x6,0,,10,10.0,Find the prime factorization of 42.
+15,274496,70730,49372,88057,1,0,1,8707,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8707,46303,,5x2x2,0,,6,6.0,Find the prime factorization of 20.
+16,270581,70730,49402,88087,1,0,1,26895,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26895,46303,,2x5x2,0,,2,2.0,Find the prime factorization of 20.
+17,274496,70730,49318,88003,1,0,1,9273,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,8,9273,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+18,277537,70730,49280,87965,1,1,6,37671,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,104952,46303,,5*2*3,0,1.0,5,5.0,Find the prime factorization of 30.
+19,264268,70730,52149,91473,1,0,1,8527,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8527,46303,,7x6,0,,10,10.0,Find the prime factorization of 42.
+20,277537,70730,49385,88070,1,1,1,12543,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,12543,46303,,2 x 2 x 3,0,,5,5.0,Find the prime factorization of 12.
+21,264268,70730,49268,87953,1,0,1,8895,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8895,46303,,2x2x2,0,,4,4.0,Find the prime factorization of 8.
+22,264268,70730,49299,87984,1,0,1,50091,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,50091,46303,,2 x3 x 3,0,,2,2.0,Find the prime factorization of 18.
+1,274496,79690,52146,91470,1,0,1,10922,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,10922,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+2,276006,79690,49362,88047,1,0,1,23010,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,23010,46303,,5x2x2,0,,2,2.0,Find the prime factorization of 20.
+3,274496,79690,49402,88087,1,0,1,32793,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,32793,46303,,2x5x2,0,,1,1.0,Find the prime factorization of 20.
+4,274496,79690,49374,88059,1,0,1,25406,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,25406,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+5,274903,79690,49282,87967,1,1,1,1111240,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,1111240,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+6,264268,79690,52144,91468,1,0,1,5721,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,5721,46303,,2 x 2 x 5,0,,10,10.0,Find the prime factorization of 20.
+7,279933,79690,49384,88069,1,1,1,20563,tutor,fill_in_1,6928,13369,33,MasterySection,6928,84.0,Prime Number,60541,5450,0,4,20563,46303,,2 x 2 x 2,0,,1,1.0,Find the prime factorization of 8.
+8,274903,79690,49397,88082,1,0,1,66048,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,66048,46303,,2x2x7,0,,5,5.0,Find the prime factorization of 28.
+9,264268,79690,49390,88075,1,1,2,4029,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,27976,46303,,15x2,0,,11,11.0,Find the prime factorization of 30.
+10,264268,79690,49388,88073,1,1,1,45896,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,45896,46303,,2x2x3,0,,7,7.0,Find the prime factorization of 12.
+11,274903,79690,49295,87980,1,1,1,18161,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,18161,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+12,264268,79690,49399,88084,1,0,1,100196,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,100196,46303,,6x3,0,,23,23.0,Find the prime factorization of 18.
+13,264268,79690,49298,87983,1,1,1,29757,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,29757,46303,,2x2x3,0,,7,7.0,Find the prime factorization of 12.
+14,277537,79690,49363,88048,1,0,1,6383,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6383,46303,,3 x 2 x 5,0,,8,8.0,Find the prime factorization of 30.
+15,276006,79690,49396,88081,1,1,1,24786,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,24786,46303,,2x5x2,0,,3,3.0,Find the prime factorization of 20.
+16,264268,79690,52147,91471,1,1,1,67360,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,67360,46303,,3x2x3,0,,9,9.0,Find the prime factorization of 18.
+17,264268,79690,49351,88036,1,0,2,5616,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,21632,46303,,6x2,0,,3,3.0,Find the prime factorization of 12.
+18,277537,79690,49294,87979,1,1,1,30313,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,30313,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+19,274903,79690,49372,88057,1,1,1,13161,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,13161,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+20,274903,79690,49386,88071,1,1,1,15008,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,15008,46303,,5x2x2,0,,4,4.0,Find the prime factorization of 20.
+21,276996,79690,52143,91467,1,1,1,7406,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,7406,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+22,270581,79690,49379,88064,1,1,1,10399,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,10399,46303,,3x3x2,0,,3,3.0,Find the prime factorization of 18.
+1,264268,70736,49300,87985,1,1,1,9633,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9633,46303,,2 x 3 x 5,0,,4,4.0,Find the prime factorization of 30.
+2,264268,70736,49303,87988,1,1,1,9314,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9314,46303,,2 x 3 x 5,0,,9,9.0,Find the prime factorization of 30.
+3,270581,70736,49278,87963,1,1,1,18427,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,18427,46303,,3x2x2,0,,2,2.0,Find the prime factorization of 12.
+4,264268,70736,49300,87985,1,1,1,10663,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10663,46303,,2 x 3 x 5,0,,7,7.0,Find the prime factorization of 30.
+5,276996,70736,49403,88088,1,0,4,9938,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,4,4,95388,46303,,5 x 6,0,1.0,2,2.0,Find the prime factorization of 30.
+6,270581,70736,49368,88053,1,0,1,11629,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11629,46303,,3x2x2,0,,4,4.0,Find the prime factorization of 12.
+7,264268,70736,49394,88079,1,0,1,12842,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12842,46303,,2x2x2,0,,6,6.0,Find the prime factorization of 8.
+8,270581,70736,52143,91467,1,1,1,11048,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,11048,46303,,3x2x2,0,,2,2.0,Find the prime factorization of 12.
+9,276006,70736,49359,88044,1,1,1,23021,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,23021,46303,,2x3x3,0,,2,2.0,Find the prime factorization of 18.
+10,270581,70736,49343,88028,1,1,1,12215,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,12215,46303,,3x5x2,0,,4,4.0,Find the prime factorization of 30.
+11,277537,70736,49317,88002,1,0,1,20711,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,20711,46303,,7x2x2,0,,6,6.0,Find the prime factorization of 28.
+12,274496,70736,49375,88060,1,1,1,11634,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,11634,46303,,2x3x2,0,,2,2.0,Find the prime factorization of 12.
+13,264268,70736,52148,91472,1,0,1,7062,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7062,46303,,15x2,0,,18,18.0,Find the prime factorization of 30.
+14,270581,70736,49368,88053,1,1,1,22219,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,22219,46303,,2 x 3 x 2,0,,2,2.0,Find the prime factorization of 12.
+15,265362,70736,49354,88039,1,1,1,53726,tutor,fill_in_1,6929,12351,59,MasterySection,6929,84.0,Prime Number,42999,2770,0,4,53726,46303,,5x2x2,0,,1,1.0,Find the prime factorization of 20.
+1,264268,70745,49303,87988,1,1,1,14668,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,14668,46303,,2x3x5,0,,22,22.0,Find the prime factorization of 30.
+2,264268,70745,49296,87981,1,1,2,4530,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7883,46303,,5x20,0,,18,18.0,Find the prime factorization of 100.
+3,274903,70745,49368,88053,1,1,1,9327,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,9327,46303,,2x2x3,0,,4,4.0,Find the prime factorization of 12.
+4,277537,70745,49359,88044,1,0,1,6221,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6221,46303,,3x3x2,0,,3,3.0,Find the prime factorization of 18.
+5,279933,70745,49280,87965,1,0,1,54272,tutor,fill_in_1,6928,13369,33,MasterySection,6928,84.0,Prime Number,60541,5450,0,4,54272,46303,,5x3x2,0,,5,5.0,Find the prime factorization of 30.
+6,277537,70745,49322,88007,1,0,1,8242,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,8242,46303,,2x2x5,0,,8,8.0,Find the prime factorization of 20.
+7,277537,70745,49336,88021,1,0,1,24502,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,24502,46303,,5x2x2,0,,1,1.0,Find the prime factorization of 20.
+8,270581,70745,49343,88028,1,1,1,12215,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,12215,46303,,3x5x2,0,,4,4.0,Find the prime factorization of 30.
+9,264268,70745,49394,88079,1,1,1,9205,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9205,46303,,2x2x2,0,,2,2.0,Find the prime factorization of 8.
+10,264268,70745,52149,91473,1,0,1,84723,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,84723,46303,,3x2x7,0,,8,8.0,Find the prime factorization of 42.
+11,264268,70745,49300,87985,1,0,1,9633,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,9633,46303,,2 x 3 x 5,0,,4,4.0,Find the prime factorization of 30.
+12,274496,70745,49368,88053,1,1,1,12719,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,12719,46303,,2x3x2,0,,4,4.0,Find the prime factorization of 12.
+13,274903,70745,49302,87987,1,1,5,34226,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,4,4,141268,46303,,1*2*4*5*10*20,0,1.0,1,1.0,Find the prime factorization of 8000.
+14,291452,70745,49354,88039,1,1,1,53726,tutor,fill_in_1,6929,14415,59,MasterySection,6929,84.0,Prime Number,69274,2770,0,4,53726,46303,,5x2x2,0,,1,1.0,Find the prime factorization of 20.
+15,264268,70745,49281,87966,1,1,1,19367,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,19367,46303,,2x3x7,0,,7,7.0,Find the prime factorization of 42.
+16,274496,70745,49373,88058,1,1,1,11797,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,11797,46303,,5x3x2,0,,3,3.0,Find the prime factorization of 30.
+17,274903,70745,52150,91474,1,1,1,6625,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,6625,46303,,5x2x2,0,,4,4.0,Find the prime factorization of 20.
+18,270581,70745,49376,88061,1,0,1,6078,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6078,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+19,270581,70745,49358,88043,1,1,1,13754,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,13754,46303,,2x3x2,0,,2,2.0,Find the prime factorization of 12.
+20,277537,70745,49364,88049,1,1,1,7469,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7469,46303,,2x2x2,0,,5,5.0,Find the prime factorization of 8.
+21,274903,70745,49348,88033,1,1,2,29051,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,36209,46303,,2x4x2,0,0.0,2,2.0,Find the prime factorization of 16.
+22,264268,70745,49296,87981,1,0,2,4530,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7883,46303,,5x20,0,,18,18.0,Find the prime factorization of 100.
+23,276006,70745,49362,88047,1,0,1,23010,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,23010,46303,,5x2x2,0,,2,2.0,Find the prime factorization of 20.
+1,274496,70746,49295,87980,1,0,1,65727,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,65727,46303,,2 x 2 x 3,0,,1,1.0,Find the prime factorization of 12.
+2,274903,70746,49397,88082,1,0,1,66048,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,66048,46303,,2x2x7,0,,5,5.0,Find the prime factorization of 28.
+3,264268,70746,49381,88066,1,1,1,22514,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,22514,46303,,7x6,0,,9,9.0,Find the prime factorization of 42.
+4,276996,70746,49369,88054,1,1,3,24047,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,74077,46303,,2x2x4,0,,2,2.0,Find the prime factorization of 16.
+5,277537,70746,49334,88019,1,0,2,16162,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,26021,46303,,2*2*2,0,,1,1.0,Find the prime factorization of 8.
+6,264268,70746,49380,88065,1,0,1,10996,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,10996,46303,,2 x 3 x 5,0,,8,8.0,Find the prime factorization of 30.
+7,274903,70746,49400,88085,1,0,1,22526,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,22526,46303,,2x5x3,0,,4,4.0,Find the prime factorization of 30.
+8,264268,70746,49374,88059,1,1,1,13320,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,13320,46303,,2x2x2,0,,19,19.0,Find the prime factorization of 8.
+9,277537,70746,49268,87953,1,0,1,8793,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,8793,46303,,2x2x2,0,,4,4.0,Find the prime factorization of 8.
+10,264268,70746,49339,88024,1,0,1,38806,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,38806,46303,,2x3x3,0,,4,4.0,Find the prime factorization of 18.
+11,274496,70746,49321,88006,1,1,4,41106,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,3,4,126651,46303,,2x2x2x2x3,0,0.0,1,1.0,Find the prime factorization of 48.
+12,274903,70746,49295,87980,1,0,1,18161,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,18161,46303,,3 x 2 x 2,0,,3,3.0,Find the prime factorization of 12.
+13,274903,70746,49296,87981,1,0,1,128726,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,128726,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+14,276006,70746,49274,87959,1,0,1,10005,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,10005,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+15,264268,70746,49372,88057,1,0,1,31986,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,31986,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+16,264268,70746,49360,88045,1,0,1,39998,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,39998,46303,,2x5x3,0,,10,10.0,Find the prime factorization of 30.
+17,264268,70746,49390,88075,1,0,1,47034,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,47034,46303,,2 x 3 x 5,0,,1,1.0,Find the prime factorization of 30.
+18,264268,70746,49403,88088,1,1,1,20261,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,20261,46303,,2x3x5,0,,9,9.0,Find the prime factorization of 30.
+19,264268,70746,49298,87983,1,0,1,11463,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,11463,46303,,2x3x3,0,,6,6.0,Find the prime factorization of 18.
+20,270581,70746,52148,91472,1,1,1,4926,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,4926,46303,,5x2x3,0,,4,4.0,Find the prime factorization of 30.
+21,276006,70746,49318,88003,1,0,1,6101,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,8,6101,46303,,3x2x2,0,,3,3.0,Find the prime factorization of 12.
+22,270581,70746,49376,88061,1,1,1,6078,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6078,46303,,2x2x5,0,,2,2.0,Find the prime factorization of 20.
+23,276006,70746,49299,87984,1,1,1,16404,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,16404,46303,,2x3x3,0,,3,3.0,Find the prime factorization of 18.
+1,264268,79608,49294,87979,1,0,1,7424,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7424,46303,,2x2x2,0,,10,10.0,Find the prime factorization of 8.
+2,276006,79608,49396,88081,1,0,1,24786,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,24786,46303,,2x5x2,0,,3,3.0,Find the prime factorization of 20.
+3,264268,79608,49318,88003,1,1,1,13142,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,8,13142,46303,,3x4,0,,9,9.0,Find the prime factorization of 12.
+4,264268,79608,49374,88059,1,0,1,4586,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,4586,46303,,4x2,0,,16,16.0,Find the prime factorization of 8.
+5,264268,79608,49369,88054,1,0,1,18359,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,18359,46303,,2 x 3 x 3,0,,3,3.0,Find the prime factorization of 18.
+6,276996,79608,49401,88086,1,0,2,49171,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,4,4,67748,46303,,7x6,0,1.0,1,1.0,Find the prime factorization of 42.
+7,264268,79608,49268,87953,1,0,1,8862,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,8862,46303,,2x2x2,0,,6,6.0,Find the prime factorization of 8.
+8,270581,79608,49318,88003,1,0,1,176223,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,8,176223,46303,,2x2x3,0,,1,1.0,Find the prime factorization of 12.
+9,270581,79608,49315,88000,1,0,1,57891,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,57891,46303,,3 x 2 x 2,0,,2,2.0,Find the prime factorization of 12.
+10,264268,79608,49364,88049,1,0,1,20461,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,20461,46303,,2x2x2,0,,3,3.0,Find the prime factorization of 8.
+11,264268,79608,49367,88052,1,1,1,12034,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12034,46303,,7x2x2,0,,10,10.0,Find the prime factorization of 28.
+12,274496,79608,49394,88079,1,0,1,20810,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,20810,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
+13,277537,79608,49280,87965,1,1,6,37671,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,104952,46303,,5*2*3,0,1.0,5,5.0,Find the prime factorization of 30.
+14,274496,79608,49393,88078,1,1,1,8603,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8603,46303,,2 x 5 x 3,0,,4,4.0,Find the prime factorization of 30.
+15,276996,79608,49271,87956,1,1,2,13859,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,48670,46303,,4x2x3,0,,4,4.0,Find the prime factorization of 24.
+16,264268,79608,49375,88060,1,1,1,7193,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7193,46303,,6x2,0,,21,21.0,Find the prime factorization of 12.
+1,277537,79609,49381,88066,1,1,1,31461,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,31461,46303,,7x2x3,0,,7,7.0,Find the prime factorization of 42.
+2,264268,79609,49294,87979,1,1,1,5208,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,5208,46303,,4x2,0,,13,13.0,Find the prime factorization of 8.
+3,276996,79609,49271,87956,1,1,2,13859,tutor,fill_in_1,8120,12309,57,MasterySection,6928,84.0,Prime Number,35135,1357,0,4,48670,46303,,4x2x3,0,,4,4.0,Find the prime factorization of 24.
+4,277537,79609,49280,87965,1,1,6,37671,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,104952,46303,,5*2*3,0,1.0,5,5.0,Find the prime factorization of 30.
+5,264268,79609,49373,88058,1,1,1,24298,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,24298,46303,,2x3x5,0,,2,2.0,Find the prime factorization of 30.
+6,276006,79609,49396,88081,1,1,1,24786,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,24786,46303,,2x5x2,0,,3,3.0,Find the prime factorization of 20.
+7,264268,79609,49369,88054,1,1,1,22847,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,22847,46303,,2 x 3 x 3,0,,10,10.0,Find the prime factorization of 18.
+8,264268,79609,49317,88002,1,1,1,39175,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,39175,46303,,14x2,0,,11,11.0,Find the prime factorization of 28.
+9,270581,79609,49338,88023,1,1,1,25943,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,25943,46303,,2x3x2,0,,8,8.0,Find the prime factorization of 12.
+10,274903,79609,49379,88064,1,1,4,40263,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,4,4,96054,46303,,3*3*2,0,1.0,1,1.0,Find the prime factorization of 18.
+11,264268,79609,49377,88062,1,1,1,25207,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,25207,46303,,7x2x2,0,,3,3.0,Find the prime factorization of 28.
+12,277537,79609,49397,88082,1,1,1,7686,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,7686,46303,,7 x 2 x 2,0,,3,3.0,Find the prime factorization of 28.
+13,264268,79609,49394,88079,1,1,1,12842,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,12842,46303,,2x2x2,0,,6,6.0,Find the prime factorization of 8.
+14,274903,79609,49277,87962,1,1,2,28033,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,3,4,168488,46303,,14 x 2,0,0.0,1,1.0,Find the prime factorization of 28.
+15,270581,79609,49368,88053,1,1,1,22219,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,22219,46303,,2 x 3 x 2,0,,2,2.0,Find the prime factorization of 12.
+16,274366,79609,49402,88087,1,1,1,17363,tutor,fill_in_1,6928,13094,5,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,17363,46303,,2x2x5,0,,1,1.0,Find the prime factorization of 20.
+17,264268,79609,49280,87965,1,1,1,116292,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,116292,46303,,2x5x3,0,,1,1.0,Find the prime factorization of 30.
+18,274496,79609,49302,87987,1,1,2,98639,tutor,fill_in_1,6928,12437,17,MasterySection,6928,84.0,Prime Number,43007,2770,1,4,185702,46303,,5 x 2 x2,0,0.0,1,1.0,Find the prime factorization of 20.
+19,277537,79609,49322,88007,1,1,1,8242,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,8242,46303,,2x2x5,0,,8,8.0,Find the prime factorization of 20.
+20,270581,79609,49315,88000,1,1,1,57891,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,57891,46303,,3 x 2 x 2,0,,2,2.0,Find the prime factorization of 12.
+1,264268,79610,49295,87980,1,1,1,55894,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,55894,46303,,2 x 3 x 3,0,,1,1.0,Find the prime factorization of 18.
+2,264268,79610,49386,88071,1,0,2,8918,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,13152,46303,,2x25,0,,15,15.0,Find the prime factorization of 50.
+3,264268,79610,49299,87984,1,0,1,39811,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,39811,46303,,2x3x3,0,,5,5.0,Find the prime factorization of 18.
+4,277537,79610,49392,88077,1,1,1,6911,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6911,46303,,5x2x2,0,,7,7.0,Find the prime factorization of 20.
+5,270581,79610,49398,88083,1,1,2,10609,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,15203,46303,,2x3x3,0,,3,3.0,Find the prime factorization of 18.
+6,264268,79610,49337,88022,1,0,1,6909,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,6909,46303,,7x4,0,,10,10.0,Find the prime factorization of 28.
+7,277537,79610,49321,88006,1,0,3,19096,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,4,4,55772,46303,,7x6,0,1.0,1,1.0,Find the prime factorization of 42.
+8,264268,79610,49303,87988,1,0,1,7038,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,7038,46303,,2x3x5,0,,12,12.0,Find the prime factorization of 30.
+9,274903,79610,49316,88001,1,1,1,9448,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,9448,46303,,2x2x5,0,,4,4.0,Find the prime factorization of 20.
+10,270581,79610,52151,91475,1,1,1,10391,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,0,4,10391,46303,,3x5x2,0,,5,5.0,Find the prime factorization of 30.
+11,264268,79610,49378,88063,1,1,1,17562,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,17562,46303,,2x2x3,0,,6,6.0,Find the prime factorization of 12.
+12,264268,79610,49378,88063,1,1,1,17562,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,4,17562,46303,,2x2x3,0,,6,6.0,Find the prime factorization of 12.
+13,277537,79610,52151,91475,1,1,1,8291,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,8291,46303,,2x5x3,0,,2,2.0,Find the prime factorization of 30.
+14,274903,79610,49386,88071,1,1,1,15008,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,15008,46303,,5x2x2,0,,4,4.0,Find the prime factorization of 20.
+15,274903,79610,49340,88025,1,0,1,8038,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,8038,46303,,5x2x3,0,,6,6.0,Find the prime factorization of 30.
+16,276006,79610,49392,88077,1,1,1,12418,tutor,fill_in_1,6928,13146,23,MasterySection,6928,84.0,Prime Number,59882,5260,0,4,12418,46303,,2x5x2,0,,4,4.0,Find the prime factorization of 20.
+17,277537,79610,49392,88077,1,1,1,6911,tutor,fill_in_1,6928,13241,45,MasterySection,6928,84.0,Prime Number,22763,73,0,4,6911,46303,,5x2x2,0,,7,7.0,Find the prime factorization of 20.
+18,264268,79610,49318,88003,1,0,1,13142,tutor,fill_in_1,7750,12237,12,MasterySection,6928,84.0,Prime Number,48181,139,0,8,13142,46303,,3x4,0,,9,9.0,Find the prime factorization of 12.
+19,270581,79610,49372,88057,1,0,5,76469,tutor,fill_in_1,6928,11816,155,MasterySection,6928,84.0,Prime Number,22763,73,4,4,138540,46303,,2*2*5,0,1.0,1,1.0,Find the prime factorization of 20.
+20,274903,79610,49374,88059,1,0,1,67540,tutor,fill_in_1,6928,12436,12,MasterySection,6928,84.0,Prime Number,43007,2770,0,4,67540,46303,,2x2x2,0,,1,1.0,Find the prime factorization of 8.
