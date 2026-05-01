@@ -6,14 +6,14 @@ import re
 import joblib
 import os
 import time
-import easyocr  # OCR 라이브러리 추가
+import easyocr
 from PIL import Image
 from google import genai
 
 # 1. 환경 설정
 st.set_page_config(page_title="AI BKT 학습 시스템", layout="centered")
 
-# OCR 모델 로드 (캐싱을 통해 속도 향상)
+# OCR 모델 로드 (캐싱)
 @st.cache_resource
 def load_ocr_reader():
     return easyocr.Reader(['ko', 'en'])
@@ -34,18 +34,16 @@ if 'step' not in st.session_state:
     st.session_state.problems = []
     st.session_state.feedback_results = []
     st.session_state.new_recommendations = []
-    st.session_state.run_id = str(int(time.time() * 1000))
 
 # ===============================
 # 2. 핵심 로직 함수
 # ===============================
 
 def translate_problems_batch(en_list):
-    """15문제를 한 번에 번역하여 차단 방지"""
     combined_query = "\n".join([f"{i+1}. {txt}" for i, txt in enumerate(en_list)])
     prompt = (
-        "수학 교사로서 아래 영문 문제들을 순서대로 한국어 '-하시오' 체로 번역하시오.\n"
-        "영어는 절대 섞지 말고 한국어 문장만 15개 나열하시오.\n\n" + combined_query
+        "수학 교사로서 아래 영문 문제들을 한국어 '-하시오' 체로 번역하시오.\n"
+        "한국어 문장만 15개 나열하시오.\n\n" + combined_query
     )
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
@@ -60,10 +58,9 @@ def translate_problems_batch(en_list):
                 results.append(f"{n}을 소인수분해하시오.")
         return results
     except:
-        return [f"{re.findall('[0-9]+', t)[0] if re.findall('[0-9]+', t) else '수'}를 소인수분해하시오." for t in en_list]
+        return [f"문제를 소인수분해하시오." for _ in en_list]
 
 def diagnose_learning_status(results):
-    """RF 모델 진단 연동"""
     if not os.path.exists(RF_MODEL_PATH): return "MODEL_MISSING", 0, 0
     try:
         model = joblib.load(RF_MODEL_PATH)
@@ -90,9 +87,16 @@ if st.session_state.step == 0:
                 selected_en = random.sample(pool, 15)
                 with st.spinner("AI 선생님이 문제를 준비 중입니다..."):
                     translated_ko = translate_problems_batch(selected_en)
-                    # 데이터 구조에 'input_type'과 'img_ans' 추가
-                    st.session_state.problems = [{'id': i+1, 'question': q, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"} for i, q in enumerate(translated_ko)]
-                st.session_state.run_id = str(int(time.time() * 1000))
+                    # 이제 랜덤 키 없이, 단순하게 생성합니다.
+                    st.session_state.problems = [
+                        {
+                            'id': i+1, 
+                            'question': q, 
+                            'ans': "", 
+                            'img_ans': None, 
+                            'input_type': "⌨️ 타이핑"
+                        } for i, q in enumerate(translated_ko)
+                    ]
                 st.session_state.step = 1
                 st.rerun()
 
@@ -100,18 +104,21 @@ elif st.session_state.step == 1:
     st.title("📝 1차 학습")
     for i, p in enumerate(st.session_state.problems):
         st.markdown(f"### **Q{i+1}.**")
-        st.info(p.get('question'))
+        st.info(p['question'])
         
-        # 입력 방식 선택
-        p['input_type'] = st.radio(f"답안 제출 방식 (Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"type_{i}_{st.session_state.run_id}", horizontal=True)
+        # 제출 방식 선택
+        p['input_type'] = st.radio(f"제출 방식 (Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"type_{i}", horizontal=True)
 
         if p['input_type'] == "⌨️ 타이핑":
-            st.markdown('<input type="text" style="display:none;" name="fake_input">', unsafe_allow_html=True)
-            r_str = "".join(random.choices("lmnop", k=8))
-            p['ans'] = st.text_input(label=f"L_{r_str}_{i}", key=f"K_{st.session_state.run_id}_{i}_{r_str}", label_visibility="collapsed")
+            # ✅ 웨일 설정을 바꿨으므로, 이제 평범하고 고정된 key를 사용합니다.
+            # 이렇게 하면 글자를 입력해도 절대 사라지지 않습니다.
+            p['ans'] = st.text_input(
+                label="정답 입력", 
+                value=p['ans'], # 기존에 입력한 값을 유지
+                key=f"ans_input_{i}" # 고정된 키
+            )
         else:
-            # 카메라 입력 위젯
-            captured_img = st.camera_input(f"Q{i+1} 풀이 촬영", key=f"cam_{i}_{st.session_state.run_id}")
+            captured_img = st.camera_input(f"Q{i+1} 풀이 촬영", key=f"cam_{i}")
             if captured_img:
                 p['img_ans'] = captured_img
         st.divider()
@@ -125,8 +132,8 @@ elif st.session_state.step == 2:
     if not st.session_state.feedback_results:
         with st.spinner("AI가 채점 및 사진 분석 중..."):
             for p in st.session_state.problems:
-                # 사진인 경우 OCR 실행
                 final_ans = p['ans']
+                # 사진 모드일 때만 OCR 가동
                 if p['input_type'] == "📸 사진 찍기" and p['img_ans'] is not None:
                     img = Image.open(p['img_ans'])
                     img_np = np.array(img)
@@ -134,12 +141,18 @@ elif st.session_state.step == 2:
                     final_ans = " ".join(ocr_result)
                 
                 prompt = f"문제: {p['question']}\n학생 답: {final_ans}\nO/X 판정, 분석, 개념보강, 정답공개 순으로 작성."
-                resp = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
-                is_correct = 1 if resp.strip().startswith('O') else 0
-                st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_correct, 'content': resp})
-                if not is_correct:
-                    rec_q = client.models.generate_content(model=MODEL_NAME, contents=f"'{p['question']}' 유사 한글 문제 생성.").text
-                    st.session_state.new_recommendations.append({'ref_id': p['id'], 'q': rec_q, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"})
+                resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
+                st.session_state.feedback_results.append({
+                    'id': p['id'], 
+                    'is_correct': 1 if resp.text.strip().startswith('O') else 0, 
+                    'content': resp.text
+                })
+                
+                if not st.session_state.feedback_results[-1]['is_correct']:
+                    rec_q = client.models.generate_content(model=MODEL_NAME, contents=f"'{p['question']}' 유사 한글 문제 생성.")
+                    st.session_state.new_recommendations.append({
+                        'ref_id': p['id'], 'q': rec_q.text, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"
+                    })
 
     for res in st.session_state.feedback_results:
         if res['is_correct']: st.success(f"✅ Q{res['id']}\n{res['content']}")
@@ -153,17 +166,14 @@ elif st.session_state.step == 2:
 elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     for i, rec in enumerate(st.session_state.new_recommendations):
-        st.info(rec.get('q'))
-        rec['input_type'] = st.radio(f"방식 (추천 Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"rectype_{i}_{st.session_state.run_id}", horizontal=True)
+        st.info(rec['q'])
+        rec['input_type'] = st.radio(f"방식 (추천 Q{i+1})", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"rectype_{i}", horizontal=True)
         
         if rec['input_type'] == "⌨️ 타이핑":
-            st.markdown('<input type="text" style="display:none;" name="fake_rec">', unsafe_allow_html=True)
-            r_rec = "".join(random.choices("qrs", k=5))
-            rec['ans'] = st.text_input(label=f"R_{r_rec}", key=f"RE_{i}_{r_rec}", label_visibility="collapsed")
+            rec['ans'] = st.text_input("추천 문제 정답", value=rec['ans'], key=f"rec_ans_{i}")
         else:
-            rec_img = st.camera_input(f"추천 Q{i+1} 촬영", key=f"reccam_{i}_{st.session_state.run_id}")
-            if rec_img:
-                rec['img_ans'] = rec_img
+            rec_img = st.camera_input(f"추천 Q{i+1} 촬영", key=f"reccam_{i}")
+            if rec_img: rec['img_ans'] = rec_img
         st.divider()
 
     if st.button("🏁 최종 진단"):
@@ -172,13 +182,11 @@ elif st.session_state.step == 3:
 
 elif st.session_state.step == 4:
     st.title("🏆 최종 성취도")
-    if not hasattr(st.session_state, 'bkt_report'):
-        with st.spinner("최종 성취도 산출 중..."):
-            # 추천 문제 OCR 처리 후 피드백 리스트 보강 (선택 사항)
-            status, acc, gain = diagnose_learning_status(st.session_state.feedback_results)
-            report = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정확도:{acc*100:.1f}%. 조언 한글로.").text
-            st.session_state.bkt_report = report
-            st.session_state.bkt_status = status
+    if 'bkt_report' not in st.session_state:
+        status, acc, gain = diagnose_learning_status(st.session_state.feedback_results)
+        report = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정확도:{acc*100:.1f}%. 조언 한글로.")
+        st.session_state.bkt_report = report.text
+        st.session_state.bkt_status = status
 
     st.success(f"### 성취 등급: {st.session_state.bkt_status}")
     st.markdown(st.session_state.bkt_report)
