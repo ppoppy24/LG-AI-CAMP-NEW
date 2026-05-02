@@ -19,13 +19,13 @@ def load_ocr_reader():
 
 reader = load_ocr_reader()
 
-# API 설정 (Gemini 2.5 Flash)
+# API 설정
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# ✅ 모델 및 데이터 절대 경로 고정
-RF_MODEL_PATH = '/mount/src/lg-ai-camp-new/bkt_rf_model.pkl'
+# ✅ [수정 완료] 깃허브 파일명(언더바 2개)과 동일하게 맞췄습니다.
+RF_MODEL_PATH = '/mount/src/lg-ai-camp-new/bkt_rf__model.pkl'
 DATA_PATH = '/mount/src/lg-ai-camp-new/bkt_training_dataset_english_problem.csv'
 
 # 세션 초기화
@@ -40,10 +40,10 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems_batch(en_list):
-    """영어 문제 번역 (인사말 차단 및 f-string 에러 해결)"""
+    """영어 문제 번역 (인사말 차단)"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
-        "주의: '다음은 번역입니다' 같은 군더더기는 절대 하지 말고 번역된 문장만 나열해.\n"
+        "주의: '다음은 번역입니다' 같은 말은 절대 하지 말고 번역된 문장만 나열해.\n"
         "각 문장 앞에 '1.', '2.' 처럼 반드시 번호를 붙여서 출력해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
@@ -52,12 +52,9 @@ def translate_problems_batch(en_list):
         lines = resp.text.strip().split('\n')
         results = []
         for line in lines:
-            # 번호표(1.) 제거
             clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
-        
-        # 부족한 경우 보충
         if len(results) < len(en_list):
             for i in range(len(results), len(en_list)):
                 nums = re.findall(r'\d+', en_list[i])
@@ -65,7 +62,6 @@ def translate_problems_batch(en_list):
                 results.append(f"{num_val}을 소인수분해하시오.")
         return results[:len(en_list)]
     except:
-        # ✅ [SyntaxError 해결 포인트] f-string 외부에서 정규식 처리
         fallback_results = []
         for t in en_list:
             nums = re.findall(r'\d+', t)
@@ -184,7 +180,6 @@ elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     if not st.session_state.new_recommendations:
         with st.spinner("추천 문제 생성 중..."):
-            # f-string 내부가 아니므로 정규식 사용 가능
             used_nums = [re.findall(r'\d+', p['question'])[0] for p in st.session_state.problems if re.findall(r'\d+', p['question'])]
             for res in st.session_state.feedback_results:
                 if not res['is_correct']:
