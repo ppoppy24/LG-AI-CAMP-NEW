@@ -19,14 +19,16 @@ def load_ocr_reader():
 
 reader = load_ocr_reader()
 
-# API 설정 (Gemini 2.5 Flash 모델 사용)
+# API 설정 (Gemini 2.5 Flash)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# ✅ [경로 해결] 알려주신 절대 경로로 직접 고정합니다.
-RF_MODEL_PATH = '/mount/src/lg-ai-camp-new/bkt_rf_model.pkl'
-DATA_PATH = '/mount/src/lg-ai-camp-new/bkt_training_dataset_english_problem.csv'
+# ✅ [경로 해결 핵심] 하드코딩 대신 현재 파일 위치를 기준으로 경로를 생성합니다.
+# 이렇게 하면 로컬 환경이든 배포 환경(/mount/src/...)이든 상관없이 파일을 찾아냅니다.
+CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+RF_MODEL_PATH = os.path.join(CUR_DIR, 'bkt_rf_model.pkl')
+DATA_PATH = os.path.join(CUR_DIR, 'bkt_training_dataset_english_problem.csv')
 
 # 세션 초기화
 if 'step' not in st.session_state:
@@ -40,10 +42,10 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems_batch(en_list):
-    """영어 문제를 한글로 번역 - 인사말 차단 및 숫자 보존"""
+    """영어 문제 번역 (인사말 차단)"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
-        "주의: '다음은 번역입니다' 같은 서론은 절대 하지 말고 번역된 문장만 나열해.\n"
+        "주의: '다음은 번역입니다' 같은 군더더기는 절대 하지 말고 번역된 문장만 나열해.\n"
         "각 문장 앞에 '1.', '2.' 처럼 반드시 번호를 붙여서 출력해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
@@ -52,7 +54,6 @@ def translate_problems_batch(en_list):
         lines = resp.text.strip().split('\n')
         results = []
         for line in lines:
-            # 번호표(1.)만 제거하고 실제 숫자(20 등)는 보존
             clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
@@ -63,27 +64,19 @@ def translate_problems_batch(en_list):
                 results.append(f"{num_val}을 소인수분해하시오.")
         return results[:len(en_list)]
     except:
-        fallback_results = []
-        for t in en_list:
-            nums = re.findall(r'\d+', t)
-            num_val = nums[0] if nums else "수"
-            fallback_results.append(f"{num_val}을 소인수분해하시오.")
-        return fallback_results
+        return [f"{re.findall(r'\d+', t)[0] if re.findall(r'\d+', t) else '수'}을 소인수분해하시오." for t in en_list]
 
 def diagnose_learning_status(results):
-    """모델 파일을 로드하여 진단 수행"""
+    """모델 로드 및 진단"""
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     
-    # 모델 파일 존재 여부 확인
+    # ✅ 파일 존재 여부 실시간 체크
     if not os.path.exists(RF_MODEL_PATH):
-        return f"MODEL_MISSING (파일이 {RF_MODEL_PATH}에 없습니다)", actual_acc, 0.0
+        return f"MODEL_MISSING: {RF_MODEL_PATH}", actual_acc, 0.0
         
     try:
-        # 모델 로드
         model = joblib.load(RF_MODEL_PATH)
-        
-        # 데이터 전처리
         init_k = corrects[0] * 0.4
         final_k = corrects[-1] * 0.8
         gain = max(0, final_k - init_k)
@@ -104,16 +97,16 @@ def diagnose_learning_status(results):
 if st.session_state.step == 0:
     st.title("🎓 AI BKT 학습 시스템")
     
-    # 모델 파일 존재 여부 체크 시각화
+    # ✅ 배포 전 상태 체크
     if not os.path.exists(RF_MODEL_PATH):
-        st.warning(f"⚠️ 모델 파일을 찾을 수 없습니다. 경로를 확인해주세요: {RF_MODEL_PATH}")
+        st.error(f"🚨 모델 파일이 없습니다! 깃허브에 'bkt_rf_model.pkl'이 있는지 확인해주세요.")
+        st.code(f"현재 경로: {CUR_DIR}\n필요 파일: {RF_MODEL_PATH}")
 
     if st.button("🚀 오늘의 문제 시작하기", type="primary", use_container_width=True):
         if os.path.exists(DATA_PATH):
             df = pd.read_csv(DATA_PATH)
             pool = df['generated_problem_english'].dropna().unique().tolist()
             
-            # 숫자 기반 중복 제거
             unique_numbered_dict = {}
             for text in pool:
                 nums = re.findall(r'\d+', text)
@@ -136,16 +129,15 @@ if st.session_state.step == 0:
                 st.rerun()
 
 elif st.session_state.step == 1:
-    st.title("📝 1차 학습 (15문항)")
+    st.title("📝 1차 학습")
     for i, p in enumerate(st.session_state.problems):
         st.markdown(f"### **Q{i+1}.**")
         st.info(p['question'])
         p['input_type'] = st.radio(f"방식_{i}", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"t_{i}", horizontal=True, label_visibility="collapsed")
-        
         if p['input_type'] == "⌨️ 타이핑":
             p['ans'] = st.text_input(f"답_{i}", value=p['ans'], key=f"a_{i}", label_visibility="collapsed", placeholder="정답 입력")
         else:
-            c_img = st.camera_input(f"카메라_{i}", key=f"c_{i}", label_visibility="collapsed")
+            c_img = st.camera_input(f"촬영", key=f"c_{i}", label_visibility="collapsed")
             if c_img: p['img_ans'] = c_img
         st.divider()
 
@@ -157,22 +149,11 @@ elif st.session_state.step == 2:
     st.title("🔍 채점 결과")
     if not st.session_state.feedback_results:
         with st.spinner("AI 분석 중..."):
-            student_summary = []
-            for p in st.session_state.problems:
-                f_ans = p['ans']
-                if p['input_type'] == "📸 사진 찍기" and p['img_ans'] is not None:
-                    try:
-                        img = Image.open(p['img_ans'])
-                        ocr_res = reader.readtext(np.array(img), detail=0)
-                        f_ans = " ".join(ocr_res)
-                    except: f_ans = "(OCR 실패)"
-                student_summary.append(f"Q{p['id']}. 문제: {p['question']} / 학생답: {f_ans}")
-
+            student_summary = [f"Q{p['id']}. 문제: {p['question']} / 학생답: {p['ans']}" for p in st.session_state.problems]
             prompt = (
                 "수학 교사로서 채점해줘.\n"
-                "1. [채점 리스트]: 모든 문항에 대해 'Q1: O', 'Q2: X' 형식으로 작성해.\n"
-                "2. [상세 분석]: 틀린 문제(X)만 골라서 아주 상세한 풀이와 정답을 작성해.\n"
-                "맞은 문제는 절대 설명하지 마.\n\n" + "\n".join(student_summary)
+                "1. [채점 리스트]: 'Q1: O', 'Q2: X' 형식으로 작성.\n"
+                "2. [상세 분석]: 틀린 문제(X)만 상세 분석.\n\n" + "\n".join(student_summary)
             )
             feedback_text = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
             
@@ -181,7 +162,7 @@ elif st.session_state.step == 2:
                 st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_ok})
             st.session_state.full_feedback = feedback_text
 
-    st.subheader("📊 요약 결과")
+    st.subheader("📊 요약 리스트")
     cols = st.columns(5)
     for i, res in enumerate(st.session_state.feedback_results):
         with cols[i % 5]:
@@ -197,9 +178,8 @@ elif st.session_state.step == 2:
 
 elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
-    # ✅ [1:1 추천] 틀린 문제 개수만큼 생성
     if not st.session_state.new_recommendations:
-        with st.spinner("오답 수에 맞춰 추천 문제를 생성 중..."):
+        with st.spinner("추천 문제 생성 중..."):
             used_nums = [re.findall(r'\d+', p['question'])[0] for p in st.session_state.problems if re.findall(r'\d+', p['question'])]
             for res in st.session_state.feedback_results:
                 if not res['is_correct']:
@@ -208,8 +188,6 @@ elif st.session_state.step == 3:
                     try:
                         r = client.models.generate_content(model=MODEL_NAME, contents=rec_p).text
                         st.session_state.new_recommendations.append({'q': r, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"})
-                        new_ns = re.findall(r'\d+', r)
-                        if new_ns: used_nums.append(new_ns[0])
                     except: pass
 
     for i, rec in enumerate(st.session_state.new_recommendations):
@@ -219,7 +197,7 @@ elif st.session_state.step == 3:
         if rec['input_type'] == "⌨️ 타이핑":
             rec['ans'] = st.text_input(f"답안_{i}", value=rec['ans'], key=f"ra_{i}", label_visibility="collapsed")
         else:
-            rimg = st.camera_input(f"카메라추천_{i}", key=f"rc_{i}", label_visibility="collapsed")
+            rimg = st.camera_input(f"촬영", key=f"rc_{i}", label_visibility="collapsed")
             if rimg: rec['img_ans'] = rimg
         st.divider()
     
