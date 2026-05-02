@@ -37,15 +37,15 @@ if 'step' not in st.session_state:
     st.session_state.new_recommendations = []
 
 # ===============================
-# 2. 핵심 로직 함수 (수정됨)
+# 2. 핵심 로직 함수 (수정된 부분)
 # ===============================
 
 def translate_problems_batch(en_list):
-    """영어 문제를 한글로 번역 - 인사말 차단 로직 강화"""
+    """영어 문제를 한글로 번역 - 숫자 소실 방지 로직 강화"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
-        "⚠️주의: '다음은 번역입니다' 같은 인사말이나 서론은 절대 포함하지 마.\n" # 인사말 차단 프롬프트
-        "오직 번역된 문제 문장만 각 줄에 하나씩 나열해.\n\n" + 
+        "주의: '다음은 번역입니다' 같은 말은 절대 하지 말고 번역된 문장만 나열해.\n"
+        "각 문장 앞에 '1.', '2.' 처럼 반드시 번호를 붙여서 출력해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
     try:
@@ -54,18 +54,19 @@ def translate_problems_batch(en_list):
         
         results = []
         for line in lines:
-            # 1. 숫자로 시작하는 줄에서 내용만 추출 (예: "1. 20을~" -> "20을~")
-            clean_line = re.sub(r'^\d+[\.\s]*', '', line).strip()
-            # 2. 내용이 비어있지 않고, '번역'이라는 단어가 포함된 인사말이 아닌 경우만 추가
+            # ✅ [수정 포인트] 번호 뒤에 반드시 점(.)이 있는 경우에만 앞부분을 제거합니다.
+            # '1. 20'에서 '1.'만 지우고 '20'은 남깁니다.
+            clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
+            
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
         
-        # 개수가 부족하면 숫자를 추출해 강제 생성
+        # 개수가 부족할 때를 대비한 안전 장치
         if len(results) < len(en_list):
             for i in range(len(results), len(en_list)):
                 nums = re.findall(r'\d+', en_list[i])
                 num_val = nums[0] if nums else "수"
-                results.append(f"{num_val}를 소인수분해하시오.")
+                results.append(f"{num_val}을 소인수분해하시오.")
                 
         return results[:len(en_list)]
     except:
@@ -73,7 +74,7 @@ def translate_problems_batch(en_list):
         for t in en_list:
             nums = re.findall(r'\d+', t)
             num_val = nums[0] if nums else "수"
-            fallback_results.append(f"{num_val}를 소인수분해하시오.")
+            fallback_results.append(f"{num_val}을 소인수분해하시오.")
         return fallback_results
 
 def diagnose_learning_status(results):
