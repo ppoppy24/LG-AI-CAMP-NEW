@@ -24,11 +24,9 @@ API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# ✅ [경로 해결 핵심] 하드코딩 대신 현재 파일 위치를 기준으로 경로를 생성합니다.
-# 이렇게 하면 로컬 환경이든 배포 환경(/mount/src/...)이든 상관없이 파일을 찾아냅니다.
-CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-RF_MODEL_PATH = os.path.join(CUR_DIR, 'bkt_rf_model.pkl')
-DATA_PATH = os.path.join(CUR_DIR, 'bkt_training_dataset_english_problem.csv')
+# ✅ 모델 및 데이터 절대 경로 고정
+RF_MODEL_PATH = '/mount/src/lg-ai-camp-new/bkt_rf_model.pkl'
+DATA_PATH = '/mount/src/lg-ai-camp-new/bkt_training_dataset_english_problem.csv'
 
 # 세션 초기화
 if 'step' not in st.session_state:
@@ -42,7 +40,7 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems_batch(en_list):
-    """영어 문제 번역 (인사말 차단)"""
+    """영어 문제 번역 (인사말 차단 및 f-string 에러 해결)"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
         "주의: '다음은 번역입니다' 같은 군더더기는 절대 하지 말고 번역된 문장만 나열해.\n"
@@ -54,9 +52,12 @@ def translate_problems_batch(en_list):
         lines = resp.text.strip().split('\n')
         results = []
         for line in lines:
+            # 번호표(1.) 제거
             clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
+        
+        # 부족한 경우 보충
         if len(results) < len(en_list):
             for i in range(len(results), len(en_list)):
                 nums = re.findall(r'\d+', en_list[i])
@@ -64,16 +65,21 @@ def translate_problems_batch(en_list):
                 results.append(f"{num_val}을 소인수분해하시오.")
         return results[:len(en_list)]
     except:
-        return [f"{re.findall(r'\d+', t)[0] if re.findall(r'\d+', t) else '수'}을 소인수분해하시오." for t in en_list]
+        # ✅ [SyntaxError 해결 포인트] f-string 외부에서 정규식 처리
+        fallback_results = []
+        for t in en_list:
+            nums = re.findall(r'\d+', t)
+            num_val = nums[0] if nums else "수"
+            fallback_results.append(f"{num_val}을 소인수분해하시오.")
+        return fallback_results
 
 def diagnose_learning_status(results):
     """모델 로드 및 진단"""
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     
-    # ✅ 파일 존재 여부 실시간 체크
     if not os.path.exists(RF_MODEL_PATH):
-        return f"MODEL_MISSING: {RF_MODEL_PATH}", actual_acc, 0.0
+        return f"MODEL_MISSING (경로: {RF_MODEL_PATH})", actual_acc, 0.0
         
     try:
         model = joblib.load(RF_MODEL_PATH)
@@ -97,10 +103,8 @@ def diagnose_learning_status(results):
 if st.session_state.step == 0:
     st.title("🎓 AI BKT 학습 시스템")
     
-    # ✅ 배포 전 상태 체크
     if not os.path.exists(RF_MODEL_PATH):
-        st.error(f"🚨 모델 파일이 없습니다! 깃허브에 'bkt_rf_model.pkl'이 있는지 확인해주세요.")
-        st.code(f"현재 경로: {CUR_DIR}\n필요 파일: {RF_MODEL_PATH}")
+        st.error(f"🚨 모델 파일을 찾을 수 없습니다! 경로: {RF_MODEL_PATH}")
 
     if st.button("🚀 오늘의 문제 시작하기", type="primary", use_container_width=True):
         if os.path.exists(DATA_PATH):
@@ -180,6 +184,7 @@ elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     if not st.session_state.new_recommendations:
         with st.spinner("추천 문제 생성 중..."):
+            # f-string 내부가 아니므로 정규식 사용 가능
             used_nums = [re.findall(r'\d+', p['question'])[0] for p in st.session_state.problems if re.findall(r'\d+', p['question'])]
             for res in st.session_state.feedback_results:
                 if not res['is_correct']:
