@@ -19,12 +19,12 @@ def load_ocr_reader():
 
 reader = load_ocr_reader()
 
-# API 설정
+# API 설정 (사용자 요청: gemini-2.5-flash)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# 경로 설정
+# ✅ [경로 해결 핵심] 현재 파일(main.py)이 있는 위치를 기준으로 절대 경로를 잡습니다.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RF_MODEL_PATH = os.path.join(BASE_DIR, 'bkt_rf_model.pkl')
 DATA_PATH = os.path.join(BASE_DIR, 'bkt_training_dataset_english_problem.csv')
@@ -37,11 +37,10 @@ if 'step' not in st.session_state:
     st.session_state.new_recommendations = []
 
 # ===============================
-# 2. 핵심 로직 함수 (수정된 부분)
+# 2. 핵심 로직 함수
 # ===============================
 
 def translate_problems_batch(en_list):
-    """영어 문제를 한글로 번역 - 숫자 소실 방지 로직 강화"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
         "주의: '다음은 번역입니다' 같은 말은 절대 하지 말고 번역된 문장만 나열해.\n"
@@ -51,23 +50,16 @@ def translate_problems_batch(en_list):
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
         lines = resp.text.strip().split('\n')
-        
         results = []
         for line in lines:
-            # ✅ [수정 포인트] 번호 뒤에 반드시 점(.)이 있는 경우에만 앞부분을 제거합니다.
-            # '1. 20'에서 '1.'만 지우고 '20'은 남깁니다.
             clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
-            
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
-        
-        # 개수가 부족할 때를 대비한 안전 장치
         if len(results) < len(en_list):
             for i in range(len(results), len(en_list)):
                 nums = re.findall(r'\d+', en_list[i])
                 num_val = nums[0] if nums else "수"
                 results.append(f"{num_val}을 소인수분해하시오.")
-                
         return results[:len(en_list)]
     except:
         fallback_results = []
@@ -81,11 +73,16 @@ def diagnose_learning_status(results):
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     
+    # 🔍 모델 파일이 있는지 먼저 꼼꼼하게 확인합니다.
     if not os.path.exists(RF_MODEL_PATH):
-        return "MODEL_MISSING (파일 없음)", actual_acc, 0.0
+        # 사용자에게 파일이 어디에 있어야 하는지 알려주는 친절한 에러 메시지
+        return f"MODEL_MISSING (파일이 {BASE_DIR}에 없습니다)", actual_acc, 0.0
         
     try:
+        # 모델 로딩 시도
         model = joblib.load(RF_MODEL_PATH)
+        
+        # BKT 연산을 위한 데이터 준비
         init_k = corrects[0] * 0.4
         final_k = corrects[-1] * 0.8
         gain = max(0, final_k - init_k)
@@ -97,7 +94,7 @@ def diagnose_learning_status(results):
         status = model.predict(df_input)[0]
         return status, actual_acc, gain
     except Exception as e:
-        return f"ERROR: {type(e).__name__}", actual_acc, 0.0
+        return f"ERROR: {str(e)}", actual_acc, 0.0
 
 # ===============================
 # 3. UI 및 단계별 흐름
@@ -105,6 +102,11 @@ def diagnose_learning_status(results):
 
 if st.session_state.step == 0:
     st.title("🎓 AI BKT 학습 시스템")
+    
+    # 🛠️ [디버그용] 만약 모델을 못 찾으면 관리자가 볼 수 있게 경로 정보를 띄워줍니다.
+    if not os.path.exists(RF_MODEL_PATH):
+        st.warning(f"⚠️ 모델 파일을 찾을 수 없습니다. 파일명을 확인해주세요: {RF_MODEL_PATH}")
+
     if st.button("🚀 오늘의 문제 시작하기", type="primary", use_container_width=True):
         if os.path.exists(DATA_PATH):
             df = pd.read_csv(DATA_PATH)
