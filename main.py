@@ -16,17 +16,18 @@ st.set_page_config(page_title="AI BKT 학습 시스템", layout="centered")
 
 @st.cache_resource
 def load_ocr_reader():
+    # OCR 엔진 로드
     return easyocr.Reader(['ko', 'en'], gpu=False)
 
 reader = load_ocr_reader()
 
-# API 설정 (Gemini 2.5 Flash)
+# API 설정 (사용자 지정: Gemini 2.5 Flash)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# 경로 설정 (언더바 2개 'bkt_rf__model.pkl' 확인)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 경로 설정 (깃허브 절대 경로 및 언더바 2개 확인)
+BASE_DIR = "/mount/src/lg-ai-camp-new"
 RF_MODEL_PATH = os.path.join(BASE_DIR, 'bkt_rf__model.pkl')
 DATA_PATH = os.path.join(BASE_DIR, 'bkt_training_dataset_english_problem.csv')
 
@@ -42,9 +43,10 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems_batch(en_list):
+    """영어 문제 번역 (f-string 역슬래시 에러 방지 버전)"""
     prompt = (
-        "수학 선생님으로서 다음 영어 문제들을 한국어 '-하시오' 체로 번역해줘.\n"
-        "서론 없이 번호와 문장만 나열해.\n\n" + 
+        "수학 선생님으로서 다음 영어 문제들을 한국어로 번역해줘.\n"
+        "'-하시오' 체를 사용하고, 인사말 없이 번호와 문장만 나열해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
     try:
@@ -60,6 +62,7 @@ def translate_problems_batch(en_list):
         return fallback
 
 def diagnose_learning_status(results):
+    """BKT 및 랜덤포레스트 기반 진단"""
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     changes = sum(1 for i in range(len(corrects)-1) if corrects[i] != corrects[i+1])
@@ -78,6 +81,7 @@ def diagnose_learning_status(results):
                                 columns=['initial_knowledge', 'final_knowledge', 'learning_gain', 'accuracy', 'variance'])
         status = model.predict(df_input)[0]
 
+        # 등급 보정 (사용자 요청 반영)
         if actual_acc == 100.0: status = "Master (완벽)"
         elif actual_acc <= 30.0: status = "Unstable (불안정)"
         return status, actual_acc, stability
@@ -94,6 +98,7 @@ if st.session_state.step == 0:
         if os.path.exists(DATA_PATH):
             df = pd.read_csv(DATA_PATH)
             pool = df['generated_problem_english'].dropna().unique().tolist()
+            # 숫자 중복 제거 로직
             unique_numbered_dict = {re.findall(r'\d+', t)[0]: t for t in pool if re.findall(r'\d+', t)}
             clean_pool = list(unique_numbered_dict.values())
             if len(clean_pool) >= 15:
@@ -113,11 +118,11 @@ elif st.session_state.step == 1:
         if p['input_type'] == "⌨️ 타이핑":
             p['ans'] = st.text_input(f"답안_{i}", value=p['ans'], key=f"a_{i}", label_visibility="collapsed")
         else:
-            # ✅ [핵심 수정] 사진을 찍는 즉시 바이트로 변환하여 세션에 저장
+            # 사진 데이터 저장 (증발 방지 로직)
             cam_file = st.camera_input(f"촬영_{i}", key=f"cam_{i}", label_visibility="collapsed")
             if cam_file:
                 st.session_state.problems[i]['img_bytes'] = cam_file.getvalue()
-                st.success(f"Q{i+1} 사진이 정상적으로 기록되었습니다.")
+                st.success(f"Q{i+1} 사진이 기록되었습니다.")
         st.divider()
 
     if st.button("📤 모든 답안 제출", type="primary", use_container_width=True):
@@ -127,32 +132,37 @@ elif st.session_state.step == 1:
 elif st.session_state.step == 2:
     st.title("🔍 채점 결과")
     if not st.session_state.feedback_results:
-        with st.spinner("사진에서 글자를 읽어와 채점 중입니다..."):
+        with st.spinner("AI가 틀린 문제만 분석 중입니다..."):
             student_summary = []
             for p in st.session_state.problems:
                 f_ans = p['ans']
-                # ✅ [핵심 수정] 세션에 저장된 바이트 데이터를 불러와 OCR 수행
                 if p['input_type'] == "📸 사진 찍기" and p['img_bytes'] is not None:
                     try:
                         img = Image.open(io.BytesIO(p['img_bytes']))
                         ocr_res = reader.readtext(np.array(img), detail=0)
                         f_ans = " ".join(ocr_res) if ocr_res else "(글자 인식 실패)"
-                    except:
-                        f_ans = "(이미지 처리 오류)"
-                
+                    except: f_ans = "(이미지 처리 오류)"
                 student_summary.append(f"Q{p['id']}. 문제: {p['question']} / 학생답: {f_ans}")
 
-            prompt = "수학 교사로서 채점해줘. 'Q번호: O/X' 리스트를 반드시 포함해.\n\n" + "\n".join(student_summary)
-            feedback_text = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
+            # ✅ 강력한 피드백 제한 프롬프트
+            prompt = (
+                "수학 교사로서 학생의 답안을 채점해줘.\n"
+                "1. [채점표]: 'Q1: O', 'Q2: X' 형식으로 모든 문항의 정오답을 리스트로 작성해.\n"
+                "2. [오답 분석]: 오직 'X'로 표시된 틀린 문제에 대해서만 원인 분석과 올바른 소인수분해 과정을 설명해.\n"
+                "⚠️ 주의: 맞은 문제(O)에 대해서는 절대 피드백이나 설명을 제공하지 마."
+            )
+            input_text = prompt + "\n\n" + "\n".join(student_summary)
+            feedback_text = client.models.generate_content(model=MODEL_NAME, contents=input_text).text
             st.session_state.full_feedback = feedback_text
 
+            # 1:1 추천 문제 생성 (틀린 문제만큼)
             used_nums = [re.findall(r'\d+', prob['question'])[0] for prob in st.session_state.problems if re.findall(r'\d+', prob['question'])]
             for p in st.session_state.problems:
                 match = re.search(f"Q{p['id']}:?\s*([OX0])", feedback_text, re.IGNORECASE)
                 is_ok = 1 if match and match.group(1).upper() in ['O', '0'] else 0
                 st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_ok})
                 if is_ok == 0:
-                    rec_p = f"학생이 '{p['question']}'를 틀렸어. 숫자 {used_nums}를 제외한 유사 소인수분해 문제 1개 생성."
+                    rec_p = f"학생이 '{p['question']}'를 틀렸어. 숫자 {used_nums}를 제외한 유사 소인수분해 문제 1개 생성해."
                     try:
                         r = client.models.generate_content(model=MODEL_NAME, contents=rec_p).text
                         st.session_state.new_recommendations.append({'q': r, 'ans': "", 'img_bytes': None, 'input_type': "⌨️ 타이핑"})
@@ -167,7 +177,7 @@ elif st.session_state.step == 2:
     st.markdown(st.session_state.full_feedback)
     
     if st.session_state.new_recommendations:
-        if st.button(f"🚀 추천 문제 풀기", type="primary", use_container_width=True):
+        if st.button(f"🚀 추천 문제 ({len(st.session_state.new_recommendations)}개) 풀기", type="primary", use_container_width=True):
             st.session_state.step = 3
             st.rerun()
 
@@ -175,11 +185,11 @@ elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
     for i, rec in enumerate(st.session_state.new_recommendations):
         st.info(f"💡 추천 {i+1}: {rec['q']}")
-        rec['input_type'] = st.radio(f"입력_{i}", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"rt_{i}", horizontal=True, label_visibility="collapsed")
+        rec['input_type'] = st.radio(f"입력_추천_{i}", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"rt_{i}", horizontal=True, label_visibility="collapsed")
         if rec['input_type'] == "⌨️ 타이핑":
-            rec['ans'] = st.text_input(f"답안_{i}", key=f"ra_{i}", label_visibility="collapsed")
+            rec['ans'] = st.text_input(f"답안_추천_{i}", key=f"ra_{i}", label_visibility="collapsed")
         else:
-            rcam = st.camera_input(f"촬영_{i}", key=f"rcam_{i}", label_visibility="collapsed")
+            rcam = st.camera_input(f"촬영_추천_{i}", key=f"rcam_{i}", label_visibility="collapsed")
             if rcam: rec['img_bytes'] = rcam.getvalue()
         st.divider()
     
@@ -195,6 +205,6 @@ elif st.session_state.step == 4:
     try:
         rep = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정답률:{actual_acc}%. 조언 한글로.").text
         st.markdown(rep)
-    except: st.write("리포트 생성 중...")
+    except: st.write("리포트 생성 오류")
     if st.button("🔄 처음으로"):
         st.session_state.clear(); st.rerun()
