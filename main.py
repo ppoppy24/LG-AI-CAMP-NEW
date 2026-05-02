@@ -19,7 +19,7 @@ def load_ocr_reader():
 
 reader = load_ocr_reader()
 
-# API 설정 (사용자 지정 모델: gemini-2.5-flash)
+# API 설정
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
@@ -42,14 +42,20 @@ def translate_problems_batch(en_list):
     """영어 문제를 한글로 번역"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
-        "각 줄에 하나씩 정답만 나열해.\n\n" + 
+        "각 줄에 하나씩 번역된 문장만 나열해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
     try:
         resp = client.models.generate_content(model=MODEL_NAME, contents=prompt)
         return [line.split('. ')[-1].strip() for line in resp.text.strip().split('\n') if line]
     except:
-        return [f"{re.findall(r'\d+', t)[0]}를 소인수분해하시오." for t in en_list]
+        # ✅ [SyntaxError 해결] f-string 내부에서 직접 re.findall을 호출하지 않고 외부에서 변수화
+        fallback_results = []
+        for t in en_list:
+            nums = re.findall(r'\d+', t)
+            num_val = nums[0] if nums else "수"
+            fallback_results.append(f"{num_val}를 소인수분해하시오.")
+        return fallback_results
 
 def diagnose_learning_status(results):
     if not os.path.exists(RF_MODEL_PATH): return "MODEL_MISSING", 0, 0
@@ -75,23 +81,20 @@ if st.session_state.step == 0:
             df = pd.read_csv(DATA_PATH)
             pool = df['generated_problem_english'].dropna().unique().tolist()
             
-            # ✅ [숫자 기반 중복 제거 핵심]
-            # 숫자를 키(Key)로 사용하여 딕셔너리에 담으면 중복 숫자가 자동으로 제거됩니다.
+            # ✅ [숫자 기반 중복 제거]
             unique_numbered_dict = {}
             for text in pool:
                 nums = re.findall(r'\d+', text)
                 if nums:
-                    num_val = nums[0] # 추출된 숫자 (예: "20")
+                    num_val = nums[0]
                     if num_val not in unique_numbered_dict:
                         unique_numbered_dict[num_val] = text
             
-            # 숫자 중복이 제거된 순수 문제 리스트
             clean_pool = list(unique_numbered_dict.values())
 
             if len(clean_pool) >= 15:
-                # 15개 무작위 추출
                 selected_en = random.sample(clean_pool, 15)
-                with st.spinner("숫자 중복 검사 완료! 문제를 번역 중입니다..."):
+                with st.spinner("숫자 중복 검사 완료! 번역 중..."):
                     translated_ko = translate_problems_batch(selected_en)
                     st.session_state.problems = [
                         {'id': i+1, 'question': q, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"} 
@@ -133,17 +136,18 @@ elif st.session_state.step == 2:
                     except: f_ans = "(OCR 실패)"
                 student_summary.append(f"Q{p['id']}. 문제: {p['question']} / 학생답: {f_ans}")
 
-            # 피드백 지시사항 수정: 요약 리스트 + 틀린 것만 상세 설명
             prompt = (
                 "수학 선생님으로서 채점해줘.\n"
                 "1. [채점 요약]: 모든 문항에 대해 'Q1: O', 'Q2: X' 형식으로 리스트를 작성해.\n"
                 "2. [오답 클리닉]: 틀린 문제(X)에 대해서만 문제 원문, 상세 분석, 정답을 길게 설명해.\n"
                 "맞은 문제는 절대 설명하지 마.\n\n" + "\n".join(student_summary)
             )
-
-            feedback_text = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
             
-            # 정오답 데이터 추출
+            try:
+                feedback_text = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
+            except:
+                feedback_text = "피드백 생성 오류가 발생했습니다."
+
             for p in st.session_state.problems:
                 is_ok = 1 if f"Q{p['id']}: O" in feedback_text or f"Q{p['id']}:O" in feedback_text else 0
                 st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_ok})
@@ -167,14 +171,16 @@ elif st.session_state.step == 2:
 
 elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
-    # 추천 문제 생성 시 현재 사용된 숫자들 제외하도록 지시
-    used_nums = [re.findall(r'\d+', p['question'])[0] for p in st.session_state.problems if re.findall(r'\d+', p['question'])]
+    used_nums = []
+    for p in st.session_state.problems:
+        ns = re.findall(r'\d+', p['question'])
+        if ns: used_nums.append(ns[0])
     
     if not st.session_state.new_recommendations:
         for res in st.session_state.feedback_results:
             if not res['is_correct']:
                 orig_q = st.session_state.problems[res['id']-1]['question']
-                rec_p = f"'{orig_q}' 오답 보완용. 숫자 {used_nums}를 제외한 새로운 유사 소인수분해 문제 1개 생성."
+                rec_p = f"'{orig_q}' 오답 보완용. 숫자 {used_nums}를 제외한 새로운 유사 한글 문제 1개 생성."
                 try:
                     r = client.models.generate_content(model=MODEL_NAME, contents=rec_p).text
                     st.session_state.new_recommendations.append({'q': r, 'ans': "", 'img_ans': None, 'input_type': "⌨️ 타이핑"})
