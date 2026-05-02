@@ -19,15 +19,14 @@ def load_ocr_reader():
 
 reader = load_ocr_reader()
 
-# API 설정 (사용자 요청: gemini-2.5-flash)
+# API 설정 (Gemini 2.5 Flash 모델 사용)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# ✅ [경로 해결 핵심] 현재 파일(main.py)이 있는 위치를 기준으로 절대 경로를 잡습니다.
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-RF_MODEL_PATH = os.path.join(BASE_DIR, 'bkt_rf_model.pkl')
-DATA_PATH = os.path.join(BASE_DIR, 'bkt_training_dataset_english_problem.csv')
+# ✅ [경로 해결] 알려주신 절대 경로로 직접 고정합니다.
+RF_MODEL_PATH = '/mount/src/lg-ai-camp-new/bkt_rf_model.pkl'
+DATA_PATH = '/mount/src/lg-ai-camp-new/bkt_training_dataset_english_problem.csv'
 
 # 세션 초기화
 if 'step' not in st.session_state:
@@ -41,9 +40,10 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems_batch(en_list):
+    """영어 문제를 한글로 번역 - 인사말 차단 및 숫자 보존"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한글 '-하시오' 체로 번역해줘.\n"
-        "주의: '다음은 번역입니다' 같은 말은 절대 하지 말고 번역된 문장만 나열해.\n"
+        "주의: '다음은 번역입니다' 같은 서론은 절대 하지 말고 번역된 문장만 나열해.\n"
         "각 문장 앞에 '1.', '2.' 처럼 반드시 번호를 붙여서 출력해.\n\n" + 
         "\n".join([f"{i+1}. {t}" for i, t in enumerate(en_list)])
     )
@@ -52,6 +52,7 @@ def translate_problems_batch(en_list):
         lines = resp.text.strip().split('\n')
         results = []
         for line in lines:
+            # 번호표(1.)만 제거하고 실제 숫자(20 등)는 보존
             clean_line = re.sub(r'^\d+\.\s*', '', line).strip()
             if clean_line and "번역" not in clean_line[:10]:
                 results.append(clean_line)
@@ -70,19 +71,19 @@ def translate_problems_batch(en_list):
         return fallback_results
 
 def diagnose_learning_status(results):
+    """모델 파일을 로드하여 진단 수행"""
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     
-    # 🔍 모델 파일이 있는지 먼저 꼼꼼하게 확인합니다.
+    # 모델 파일 존재 여부 확인
     if not os.path.exists(RF_MODEL_PATH):
-        # 사용자에게 파일이 어디에 있어야 하는지 알려주는 친절한 에러 메시지
-        return f"MODEL_MISSING (파일이 {BASE_DIR}에 없습니다)", actual_acc, 0.0
+        return f"MODEL_MISSING (파일이 {RF_MODEL_PATH}에 없습니다)", actual_acc, 0.0
         
     try:
-        # 모델 로딩 시도
+        # 모델 로드
         model = joblib.load(RF_MODEL_PATH)
         
-        # BKT 연산을 위한 데이터 준비
+        # 데이터 전처리
         init_k = corrects[0] * 0.4
         final_k = corrects[-1] * 0.8
         gain = max(0, final_k - init_k)
@@ -103,15 +104,16 @@ def diagnose_learning_status(results):
 if st.session_state.step == 0:
     st.title("🎓 AI BKT 학습 시스템")
     
-    # 🛠️ [디버그용] 만약 모델을 못 찾으면 관리자가 볼 수 있게 경로 정보를 띄워줍니다.
+    # 모델 파일 존재 여부 체크 시각화
     if not os.path.exists(RF_MODEL_PATH):
-        st.warning(f"⚠️ 모델 파일을 찾을 수 없습니다. 파일명을 확인해주세요: {RF_MODEL_PATH}")
+        st.warning(f"⚠️ 모델 파일을 찾을 수 없습니다. 경로를 확인해주세요: {RF_MODEL_PATH}")
 
     if st.button("🚀 오늘의 문제 시작하기", type="primary", use_container_width=True):
         if os.path.exists(DATA_PATH):
             df = pd.read_csv(DATA_PATH)
             pool = df['generated_problem_english'].dropna().unique().tolist()
             
+            # 숫자 기반 중복 제거
             unique_numbered_dict = {}
             for text in pool:
                 nums = re.findall(r'\d+', text)
@@ -172,7 +174,6 @@ elif st.session_state.step == 2:
                 "2. [상세 분석]: 틀린 문제(X)만 골라서 아주 상세한 풀이와 정답을 작성해.\n"
                 "맞은 문제는 절대 설명하지 마.\n\n" + "\n".join(student_summary)
             )
-            
             feedback_text = client.models.generate_content(model=MODEL_NAME, contents=prompt).text
             
             for p in st.session_state.problems:
@@ -196,13 +197,10 @@ elif st.session_state.step == 2:
 
 elif st.session_state.step == 3:
     st.title("🎯 맞춤 추천 문제")
+    # ✅ [1:1 추천] 틀린 문제 개수만큼 생성
     if not st.session_state.new_recommendations:
-        with st.spinner("추천 문제 생성 중..."):
-            used_nums = []
-            for p in st.session_state.problems:
-                ns = re.findall(r'\d+', p['question'])
-                if ns: used_nums.append(ns[0])
-
+        with st.spinner("오답 수에 맞춰 추천 문제를 생성 중..."):
+            used_nums = [re.findall(r'\d+', p['question'])[0] for p in st.session_state.problems if re.findall(r'\d+', p['question'])]
             for res in st.session_state.feedback_results:
                 if not res['is_correct']:
                     orig_q = st.session_state.problems[res['id']-1]['question']
