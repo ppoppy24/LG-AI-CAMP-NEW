@@ -15,7 +15,7 @@ st.set_page_config(page_title="AI BKT 학습 시스템", layout="centered")
 
 @st.cache_resource
 def load_ocr_reader():
-    """EasyOCR 리더를 한 번만 로드하여 inotify 인스턴스 낭비를 방지합니다."""
+    """OCR 엔진을 캐싱하여 리소스 낭비와 inotify 에러를 방지합니다."""
     return easyocr.Reader(['ko', 'en'], gpu=False)
 
 @st.cache_resource
@@ -27,12 +27,12 @@ def load_rf_model(path):
 
 reader = load_ocr_reader()
 
-# API 설정 (Gemini 2.5 Flash 고정)
+# API 설정 (사용자 지정: Gemini 2.5 Flash)
 API_KEY = st.secrets.get("GEMINI_API_KEY", "AIzaSyDE9pzlh_JR9WvuxGbI0C2OzG36dC-r7Wg")
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash" 
 
-# 경로 설정
+# 경로 설정 (사용자 디렉토리 및 파일명 준수)
 BASE_DIR = "/mount/src/lg-ai-camp-new"
 RF_MODEL_PATH = os.path.join(BASE_DIR, 'bkt_rf__model.pkl')
 DATA_PATH = os.path.join(BASE_DIR, 'bkt_training_dataset_english_problem.csv')
@@ -50,6 +50,7 @@ if 'step' not in st.session_state:
 # ===============================
 
 def translate_problems(en_list):
+    """영어 문제를 번역하며 f-string 백슬래시 문법 오류를 해결한 버전"""
     prompt = (
         "수학 선생님으로서 다음 영어 문제들을 한국어로 번역해줘.\n"
         "'-하시오' 체를 사용하고, 인사말 없이 번호와 문장만 나열해.\n\n" + 
@@ -60,16 +61,23 @@ def translate_problems(en_list):
         lines = resp.text.strip().split('\n')
         return [re.sub(r'^\d+\.\s*', '', l).strip() for l in lines if l and "번역" not in l[:10]]
     except:
-        return [f"{re.findall(r'\d+', t)[0] if re.findall(r'\d+', t) else '수'}를 소인수분해하시오." for t in en_list]
+        # ✅ SyntaxError 해결: f-string 내부에서 직접 re.findall(r'\d+')를 쓰지 않음
+        fallback_list = []
+        for t in en_list:
+            nums = re.findall(r'\d+', t)
+            target_num = nums[0] if nums else "수"
+            fallback_list.append(f"{target_num}를 소인수분해하시오.")
+        return fallback_list
 
 def diagnose_status(results):
+    """BKT 지표와 랜덤포레스트 기반의 고도화된 진단 로직"""
     corrects = [r.get('is_correct', 0) for r in results]
     actual_acc = (sum(corrects) / len(results)) * 100 if results else 0.0
     changes = sum(1 for i in range(len(corrects)-1) if corrects[i] != corrects[i+1])
     stability = 1 - (changes / (len(corrects)-1)) if len(corrects) > 1 else 1.0
 
     model = load_rf_model(RF_MODEL_PATH)
-    if not model: return "모델 없음", actual_acc, stability
+    if not model: return "모델 파일 없음", actual_acc, stability
         
     try:
         init_k = np.mean(corrects[:5]) * 0.5 
@@ -81,90 +89,103 @@ def diagnose_status(results):
                                 columns=['initial_knowledge', 'final_knowledge', 'learning_gain', 'accuracy', 'variance'])
         status = model.predict(df_input)[0]
 
-        # 등급 보정 가드레일
-        if actual_acc == 100.0: status = "Master (완벽)"
+        # ✅ 사용자 요청 등급 보정 기준
+        if actual_acc == 100.0:
+            status = "Master (완벽)"
         elif actual_acc <= 30.0 or (actual_acc < 60.0 and stability <= 0.3):
+            # 거의 못 맞히거나 정오답 패턴이 지나치게 불안정한 경우
             status = "Unstable (불안정)"
+            
         return status, actual_acc, stability
     except:
-        return "진단 오류", actual_acc, stability
+        return "진단 처리 오류", actual_acc, stability
 
 # ===============================
-# 3. 단계별 UI
+# 3. 단계별 UI 흐름
 # ===============================
 
-# [Step 0] 시작 화면
+# [Step 0] 시작
 if st.session_state.step == 0:
     st.title("🎓 취약점 캐쳐: AI 학습 진단")
-    st.write("소인수분해 문제를 풀고 나만의 학습 등급을 확인하세요.")
-    if st.button("🚀 학습 시작하기", type="primary", use_container_width=True):
+    st.write("소인수분해를 통해 나의 학습 상태를 정밀하게 진단받으세요.")
+    if st.button("🚀 오늘 학습 시작", type="primary", use_container_width=True):
         if os.path.exists(DATA_PATH):
             df = pd.read_csv(DATA_PATH)
             pool = df['generated_problem_english'].dropna().unique().tolist()
-            unique_numbered_dict = {re.findall(r'\d+', t)[0]: t for t in pool if re.findall(r'\d+', t)}
+            # 중복 숫자 문제 제거
+            unique_numbered_dict = {}
+            for t in pool:
+                nums = re.findall(r'\d+', t)
+                if nums: unique_numbered_dict[nums[0]] = t
             clean_pool = list(unique_numbered_dict.values())
+
             if len(clean_pool) >= 15:
                 selected_en = random.sample(clean_pool, 15)
-                st.session_state.problems = [{'id': i+1, 'question': q, 'ans': "", 'img_bytes': None, 'input_type': "⌨️ 타이핑"} for i, q in enumerate(translate_problems(selected_en))]
+                translated_ko = translate_problems(selected_en)
+                st.session_state.problems = [
+                    {'id': i+1, 'question': q, 'ans': "", 'img_bytes': None, 'input_type': "⌨️ 타이핑"} 
+                    for i, q in enumerate(translated_ko)
+                ]
                 st.session_state.step = 1
                 st.rerun()
 
-# [Step 1] 문제 풀이 (사진 증발 방지 로직 포함)
+# [Step 1] 문제 풀이 (사진 데이터 영구 보존)
 elif st.session_state.step == 1:
-    st.title("📝 소인수분해 연습")
+    st.title("📝 1차 학습")
     for i, p in enumerate(st.session_state.problems):
         st.subheader(f"Q{p['id']}. {p['question']}")
-        p['input_type'] = st.radio(f"입력 방식 {i}", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"t_{i}", horizontal=True)
+        p['input_type'] = st.radio(f"방식_{i}", ["⌨️ 타이핑", "📸 사진 찍기"], key=f"t_{i}", horizontal=True, label_visibility="collapsed")
         
         if p['input_type'] == "⌨️ 타이핑":
-            p['ans'] = st.text_input(f"정답 입력 {i}", value=p['ans'], key=f"a_{i}")
+            p['ans'] = st.text_input(f"답안_{i}", value=p['ans'], key=f"a_{i}", label_visibility="collapsed")
         else:
-            cam_file = st.camera_input(f"풀이 촬영 {i}", key=f"cam_{i}")
+            cam_file = st.camera_input(f"촬영_{i}", key=f"cam_{i}", label_visibility="collapsed")
             if cam_file:
+                # ✅ 사진을 바이트로 즉시 저장하여 단계 이동 시 증발 방지
                 st.session_state.problems[i]['img_bytes'] = cam_file.getvalue()
-                st.success("사진이 저장되었습니다.")
+                st.success(f"Q{p['id']} 사진 기록 완료")
         st.divider()
 
-    if st.button("📤 답안 제출 및 분석", type="primary", use_container_width=True):
+    if st.button("📤 답안 일괄 제출", type="primary", use_container_width=True):
         st.session_state.step = 2
         st.rerun()
 
-# [Step 2] 채점 및 오답 전용 피드백
+# [Step 2] 채점 및 틀린 문제만 피드백
 elif st.session_state.step == 2:
-    st.title("🔍 채점 결과 및 분석")
+    st.title("🔍 분석 및 피드백")
     if not st.session_state.feedback_results:
-        with st.spinner("AI가 틀린 문제만 쏙쏙 골라 분석 중입니다..."):
+        with st.spinner("AI가 틀린 문제만 골라 분석하고 있습니다..."):
             student_summary = []
             for p in st.session_state.problems:
-                final_ans = p['ans']
+                f_ans = p['ans']
                 if p['input_type'] == "📸 사진 찍기" and p['img_bytes']:
                     try:
                         img = Image.open(io.BytesIO(p['img_bytes']))
                         ocr_res = reader.readtext(np.array(img), detail=0)
-                        final_ans = " ".join(ocr_res) if ocr_res else "(인식 실패)"
-                    except: final_ans = "(이미지 오류)"
-                student_summary.append(f"Q{p['id']}: {final_ans} (문제: {p['question']})")
+                        f_ans = " ".join(ocr_res) if ocr_res else "(글자 인식 불가)"
+                    except: f_ans = "(이미지 오류)"
+                student_summary.append(f"Q{p['id']}: {f_ans} (문제: {p['question']})")
 
-            # 오답 전용 피드백 프롬프트 (사고의 사슬 적용)
+            # ✅ 강력한 오답 전용 피드백 프롬프트
             prompt = (
-                "너는 친절한 수학 교사야. 다음 학생의 답안을 채점해줘.\n"
-                "1. [채점 리스트]: 'Q1: O', 'Q2: X' 형태로 모든 문항의 정오답을 표시해.\n"
-                "2. [오답 피드백]: 'X'로 표시된 틀린 문제에 대해서만 '사고의 사슬' 기법을 써서 왜 틀렸는지 분석해줘.\n"
-                "⚠️ 주의: 맞은 문제(O)는 절대 언급하거나 설명하지 마."
+                "수학 교사로서 채점해줘.\n"
+                "1. [채점]: 'Q번호: O/X' 리스트를 반드시 작성해.\n"
+                "2. [분석]: 반드시 'X'로 표시된 틀린 문제에 대해서만 '사고의 사슬' 기법을 사용해 원인을 분석해.\n"
+                "⚠️ 맞은 문제(O)는 절대 피드백이나 설명을 제공하지 마."
             )
             resp = client.models.generate_content(model=MODEL_NAME, contents=prompt + "\n\n" + "\n".join(student_summary))
             st.session_state.full_feedback = resp.text
 
-            # 결과 파싱 및 추천 문제 생성
+            # 추천 문제 생성
             for p in st.session_state.problems:
                 match = re.search(f"Q{p['id']}:?\s*([OX0])", resp.text, re.IGNORECASE)
                 is_ok = 1 if match and match.group(1).upper() in ['O', '0'] else 0
                 st.session_state.feedback_results.append({'id': p['id'], 'is_correct': is_ok})
                 if is_ok == 0:
-                    rec_p = client.models.generate_content(model=MODEL_NAME, contents=f"'{p['question']}'을 틀린 학생을 위한 숫자만 바꾼 유사 문제 1개를 '문제: '로 시작해서 만들어줘.").text
+                    rec_p = client.models.generate_content(model=MODEL_NAME, contents=f"학생이 '{p['question']}'을 틀렸어. 숫자만 바꾼 유사 문제 1개를 생성해.").text
                     st.session_state.new_recommendations.append({'q': rec_p, 'ans': "", 'img_bytes': None})
 
-    # 결과 UI
+    # UI 출력
     cols = st.columns(5)
     for i, res in enumerate(st.session_state.feedback_results):
         with cols[i % 5]:
@@ -174,7 +195,7 @@ elif st.session_state.step == 2:
     st.markdown(st.session_state.full_feedback)
     
     if st.session_state.new_recommendations:
-        if st.button("🚀 추천 문제 풀러 가기", type="primary"):
+        if st.button(f"🚀 추천 문제 ({len(st.session_state.new_recommendations)}개) 풀기", type="primary", use_container_width=True):
             st.session_state.step = 3
             st.rerun()
 
@@ -182,27 +203,27 @@ elif st.session_state.step == 2:
 elif st.session_state.step == 3:
     st.title("🎯 맞춤 보완 학습")
     for i, rec in enumerate(st.session_state.new_recommendations):
-        st.info(rec['q'])
-        rec['ans'] = st.text_input(f"정답 입력 {i}", key=f"ra_{i}")
+        st.info(f"💡 {rec['q']}")
+        rec['ans'] = st.text_input(f"답안 입력 {i}", key=f"ra_{i}")
         st.divider()
     
-    if st.button("🏁 최종 진단 결과 보기", type="primary"):
+    if st.button("🏁 최종 성취도 리포트 확인", type="primary", use_container_width=True):
         st.session_state.step = 4
         st.rerun()
 
-# [Step 4] 최종 리포트 (Master/Unstable 반영)
+# [Step 4] 성취도 리포트 (Master/Unstable 반영)
 elif st.session_state.step == 4:
-    st.title("🏆 최종 학습 리포트")
+    st.title("🏆 종합 성취도 리포트")
     status, acc, stab = diagnose_status(st.session_state.feedback_results)
     
-    st.metric("학습 상태", status)
-    st.progress(acc / 100, text=f"정답률: {acc:.1f}%")
-    st.write(f"안정성 지표: {stab*100:.1f}% (패턴이 일관될수록 높습니다)")
+    st.success(f"### 성취 등급: {status}")
+    st.metric("최종 정답률", f"{acc:.1f}%")
+    st.info(f"안정성 지표: {stab*100:.1f}%")
     
     try:
-        report = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정답률:{acc}%인 학생에게 주는 격려와 조언을 한국어로 작성해줘.").text
-        st.write(report)
-    except: st.write("진단서를 불러오는 중입니다...")
+        rep = client.models.generate_content(model=MODEL_NAME, contents=f"상태:{status}, 정답률:{acc}%. 학생에게 줄 조언을 한글로.").text
+        st.write(rep)
+    except: st.write("리포트를 불러올 수 없습니다.")
     
     if st.button("🔄 처음으로 돌아가기"):
         st.session_state.clear(); st.rerun()
